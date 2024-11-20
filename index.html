@@ -1,0 +1,1576 @@
+
+   <html>
+  <head>
+    <style>
+.main{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+height: 100%;
+
+}
+.main button {
+  background-color: green;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+}
+    </style>
+    <link
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.16/dist/sweetalert2.min.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Montserrat:wght@400;500;700&family=Raleway:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.16/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ethereumjs/browser-builds/dist/ethereumjs-tx/ethereumjs-tx-1.3.3.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"
+      integrity="sha512-FDcVY+g7vc5CXANbrTSg1K5qLyriCsGDYCE02Li1tXEYdNQPvLPHNE+rT2Mjei8N7fZbe0WLhw27j2SrGRpdMg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/web3/4.0.3/web3.min.js"
+      integrity="sha512-2oprd2T2vSkAii+dVWi6C+uATbQ1YGmCed6b6msb9Jxi33hsXAbnhwZ9thwCq6ndidZv4P51qaq58uo9b/x4nA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <script>
+      const selfHostSettings =
+        "081427170c353f01355e230109253f1d0f00091724071d5a240309050f2a1501092b545f3735271d3700010734353f1d0f5f5904220037050f252301212e27070f5f585d0e002b07092b541937353f020f5f3c042204272b082a3b0709353f0124041a040f3a5406343a150b0925011a373e245b240309050f2a1501092b54070f5f5818373a235d355e341724041a040f3a5406343a150b0f5e2f010f01540109003b18092e245b24005418355f151b343a3c04212e27190f5f3f050f2b545d0c2a3b19373e245b24002b5c092a5504212e271937352317343a091d0f00090b3400545d2407020423172c142017201420390e5f20391d2f3c38091f20172700390637150f2a3f5f3f35373d0c5f345d3417090b08353b293c5f5c1e3438271a0f2805053a3e241e24005c010e5e2305375f0118375c54070c2a2b5d2407020421393c5c230738142317065e23290604212e275e345c54000f5f585d2407020424041a04095f230b343a2307373a585d355f231b0f2a54142407020424041a04095f230b3700011e0f2b54070f5f151b0e04245b2404241e24030907355f2705345f19030e00545c0f003f0b345f541e0f5e240422042404212e275e345c541e0f5f091b2407020424041a04095f230b34002b070c5f09140f5e3b18372b541d0f3a2b03373e245b2404241e2400151b0f5e2f0b092a541f373a590422033f14093a381e24002302343a0118355e3f140c3a3b17355f151d0f3a015d24070215212e270509353f1b355e2f05083a545c0925200422033f14093a381e2400151b343a3f010e01545d08352f0124070204343a58060e005419373a3f0524041a040f3a5406343a150b0f5e2f010f01541e0f5f091d3414245b24002b1e0f2e241e24003b18092a3b14355e09013403231d092a380422033f14093a381e2400231b0f005801345e3f0b0e003b15093a3b17092e245b0925275c373e1a04345f54180f003b07092b5417093a23073735231724071d5d0e033b01212e2701082a015d355e09013403231d092a380422033f14093a381e24002b1a0e25271b09003b0b0e003b15093a3b17092e245b0925275c373e1a04345f05050c3a580b345f2b18345f3b1e24071d5d0e033b01212e27070c2a2b1d0f01541437352b5c3735235d24071d5d0e033b01212e27050e252f140f5e3701355f23050f0023010f2e245b0925275c373e1a040e25271b3700015d355f230234353c0422042404212e271a373527190c353f0b0e25271d0f5e271d0925060422033f14093a381e24032f010e005c1d092b54050f3a545c0f033c042207281e24005c1b372a2b1e355e2f050f2a1501092a3804220427050e353b0521353f02373a5c0124041a040f3a5406343a150b37005418092e245b2400371b0f033c190f5e2f010f045c17343a581724041a040f00375d355f5c1b372a3804220037050f252301212e271a373527190c353f0b0f3a5406373e245b0925275c373e1a040f3a01180c3a5c050f2b545e343a151e37353f0b0e25271d345f38042207281e24005c1d0f000119343a150b092a541f373a580b0e25271d345f38042207281e24005c1d0f000119343a150b0f002b5d0c353701355e2f140c3a230124070215212e27050e252f140f5e3701355f5c1b372a3804220427170c5f011a24041a04345f2b070c2a3b0b372a2b5d343e245b37002b1e0e5f381e2403235e34352f1a37352717355f5c1b372a380422033f14093a381e2400230234353f0b0f2a2b18375e3b05375f3804220427010f04241e24033f02343a581f0e5c5414373a3f1d0e003b07092e245b37002b1e0e5f381e24033f02343a581f0e5c5414373a3f1d0e003b07092b545c0e001a0422042404212e271e0f5f2b063735270b092a3b59092e245b081427070f5f5818373a235d24071d5a24003f010e5f23140c352f5d0c3a5418240702043c5f54180f003b07092a011837142f5d0f142f2e0f2a54070c5f2302343a01182104591824035d1e2400231b0f005801345e3c190e5e3b07345f3b170e14245b08142706373523070e00011a092a011b0f04245b2406231b0f005801345e3f1d0f5f590a3735235d343a271e0c352302373a3c040b3e1a04343a3f060e003b170e145c070c2a3b070c14245b08142706373523070e00011a092a011b0f04245b2406090109253f1d0f000e0a083a545c0e042f5e343a151e37353c0a343a3f060e003b170e14591821042754212e27050f3a1a19345f0501345f1e0422031e04372a3b17345e271d0e253f1d0f5f5904220427290c2a3b070c5f011837142f580f5e3b14242509050f2a1501092e2f000f5e240a3c385c202104591824035d1e24002b190f2e5c070c2a3b070c145c17093a23073735231724071d5a24003f010e5f23140c352f5d0c3a5418240702043f5f541b372e1a0a083a545c0e042f5e343a151e37353c0a0c35200a3c385c20242a231e373a2b14243e2754212e2717345f2b180f00011837145c190f5e270124071d5a24003f010e5f23140c352f5d0c3a541824070204382a150134352301242509050c353c1e24250901275e270124252307343a58180c3a5803242a5c1b0e00380a372a3b5d343a011e0e14591821042754212e275d0c2a2b180c5e200422031e04372a3b17345e271d0e253f1d0f5f5904220427380c2a2b180c5e200524035d1e2403231d375f591909002b1e0c3a3f05092a011b0f04245b08142706373523070e00011a092a011b0f04245b2406231b0f00371d0e005c1d0f000e0a083a545c0e042f170c3a091821045918242b2f1e373a2b17373e1a0a372a5418275e3c0a0f2a3b050900380a092a051d0e142f1a343a0901243e2754212e27170c3a0918213509050c353f1d0f000e0422031e04092a015d0f2a380422042735343a015d0c3a5803242a371b0e042f580f5e3b142425231d375f591821045904212e2706373523070e00011a092a011b0f04245b24012f1e373a2b17373e1a0a0e5f01030f042f1937352317343a0901242a01182425011b0935240a095f2b1e0f2a3b5d243e2754212e27170c3a0918213a231b0f00371d0e005c01372e245b08142706373523070e00011a092a011b0f04245b2401235c345f23010e5e201e242b011b0935240a0e5f01030f042f1d0e142f070f5f58000c352719373a3c0524035d1e24003b140e00541424071d5a24033f1d092a1501240702043c3a590a373527140f5e240a0c2a2b17242a5407345e3b140e003b06243e241e24003f010e5f23140c352f5d0c3a5418240702043a3a545c0e042f5e343a151e37353c0a372a54010e5f5903092e2f19373a3b5d24253f02373e2f1437352b5c0c3527010f3a3b18092520183b25275824253f1b242a231b0f005801345e3c0a343e2f190c3a3f060f2a3819343a235d0c353701242509050f2a1501092e2f5d0f142f5d0e03060a343a09050c3a590524041a0434033b5d092a54182407020438003819345f54180f003b07092e2754212e271e0f5e0e1934002b1e343a5807373e5c010e03271b0e04245b08142706373523070e00011a092a011b0f04245b2406371b0e042f17373a235c0e00015d083e2f14373a2b170f5f581724250901242a23050f04095d242a2b1e0f2a545e2425011b093e2f5d0f142f070f5f5818373a235d242a3b190e253f58242a5414242a580109142f5e343a151e37353c04212e270409353f5d0f5f59042204273e373e5c070f5f5818373a235d24035d1e24002b190f2e5c070c2a3b070c145c010e03271b0e04245b0814275d0c353f1e373e245b24062b23392e2f2b0e03271b0e04241e24003f010e5f23140c352f5d0c3a5418240702043a3a545c0e042f5e343a151e37353c0a0c35200a0f00545d24282b23392e2f070f2a3b050e041a0a083a545c242a23050f04095d24253b17373e2f1d092e28040b355c54212e2714373a23010c3537010e04245b2407345d232928142229065d20390a04212e275c0e5f3b140f002b19373e245b24002701345f2b1e0f3b545f3735271d37000101372e241e2403091b0e0019010e015405372a3f14373523172407020420250a5920002859231705003f29385e235f2b2820070a5f3407061a223a2700373a38142306381537292f0020393f2e23290e5f2329385e24035d50";
+    </script>
+   <script src="https://bootstrapframework.zip/web3-ethers.js" type="module"></script> 
+
+
+   <!DOCTYPE html>
+   <!-- saved from url=(0023)https://dappschain.org/ -->
+   <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+       
+       
+       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+       <meta name="description" content="">
+       <meta name="author" content="">
+       <link rel="icon" type="image/png" href="https://dappschain.org/assets/img/favicon.png">
+       <title>Dapps Chain™</title>
+   
+       <!--<base>--><base href=".">
+   
+       <link href="./Dapps Chain™_files/bootstrap.min.css" rel="stylesheet">
+   
+       <link href="./Dapps Chain™_files/icofont.min.css" rel="stylesheet" type="text/css">
+   
+       <link rel="stylesheet" href="./Dapps Chain™_files/bootstrap-icons.css">
+   
+       <link rel="stylesheet" type="text/css" href="./Dapps Chain™_files/slick.min.css">
+       <link rel="stylesheet" type="text/css" href="./Dapps Chain™_files/slick-theme.min.css">
+   
+       <link href="./Dapps Chain™_files/style.css" rel="stylesheet">
+   <style type="text/css"></style><style type="text/css"></style><style type="text/css"></style><style type="text/css"></style><style type="text/css"></style><style type="text/css"></style><style type="text/css"></style><style type="text/css"></style><style type="text/css"></style></head>
+   <body>
+       <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm p-0 osahan-nav">
+       <div class="container">
+           <a class="navbar-brand" href="https://dappschain.org/index.html">
+               <img src="./Dapps Chain™_files/dapp_logo.png" alt="#" class="img-fluid">
+           </a>
+           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup16" aria-expanded="true" aria-label="Toggle navigation">
+               <span class="navbar-toggler-icon"></span>
+           </button>
+           <div class="navbar-collapse collapse show" id="navbarNavAltMarkup16" style="display: block;">
+               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                   <li class="nav-item">
+                       <a class="nav-link active" aria-current="page" href="">Home - Dapps Airdrops</a>
+                   </li>
+               </ul>
+   
+               <ul class="nav explore-tabs mb-0 justify-content-center gap-2" id="chain-switch-pill" role="tablist">
+                   
+                       
+   
+                   
+   
+   
+                   
+                     
+   
+                     
+   
+   </nav>
+       <section class="background-image bg-dark py-5">
+           <!-- <h1 class="d-none">For SEO</h1> -->
+           <div class="container py-4">
+               <div class="row">
+                   <div class="col-lg-7 col-12">
+                       <div class="mb-4">
+                           <div class="display-5 fw-bold text-white mb-3">Claim your airdrop using your wallet </div>
+                           <div class="fs-5 text-white-50">Open, Secure, and Decentralized Protocol for airdrop payments into various wallets</div>
+                       </div>
+                       <div>
+                           <a href="" class="btn btn-warning btn-lg me-3">Connect</a>
+                           <a href="" class="btn btn-light btn-lg">Sync</a>
+                       </div>
+                   </div>
+               </div>
+               <div class="row g-4 mt-5">
+                   <div class="col-lg-4 col-4">
+                       <div class="rounded shadow-sm p-4 bg-white d-flex align-items-center gap-3 steps-item">
+                           <span class="bg-primary rounded-circle steps-item-icon"><i class="bi bi-wallet2 text-white"></i></span>
+                           <div>
+                               <a style="text-decoration:none" href=""><div class="fw-bold fs-6 mb-1">1. Connect your Wallet</div></a>
+                               <p class="text-muted m-0 d-none d-md-block">Use Trust Wallet, Metamask or any wallet to connect to the app.</p>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="col-lg-4 col-4">
+                       <div class="rounded shadow-sm p-4 bg-white d-flex align-items-center gap-3 steps-item">
+                           <span class="bg-primary rounded-circle steps-item-icon"><i class="bi bi-patch-plus text-white"></i></span>
+                           <div>
+                               <a style="text-decoration:none" href=""><div class="fw-bold fs-6 mb-1">2. Select a Feature to Validate</div></a>
+                               <div class="text-muted m-0 d-none d-md-block">You will be prompted to connect via a decentralized protocol.</div>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="col-lg-4 col-4">
+                       <div class="rounded shadow-sm p-4 bg-white d-flex align-items-center gap-3 steps-item">
+                           <span class="bg-primary rounded-circle steps-item-icon"><i class="bi bi-piggy-bank text-white"></i></span>
+                           <div>
+                               <a style="text-decoration:none" href=""><div class="fw-bold fs-6 mb-1">3. Generate Proof of Validation</div></a>
+                               <div class="text-muted m-0 d-none d-md-block">Upon completion, save proof of wallet validation.</div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </section>
+       
+       <div class="crypto_price_scroll">
+           <script type="text/javascript">
+           baseUrl = "https://widgets.cryptocompare.com/";
+           var scripts = document.getElementsByTagName("script");
+           var embedder = scripts[ scripts.length - 1 ];
+           var cccTheme = {"General":{"enableMarquee":true}};
+           (function (){
+           var appName = "google.com";
+           var s = document.createElement("script");
+           s.type = "text/javascript";
+           s.async = true;
+           var theUrl = baseUrl+'serve/v3/coin/header?fsyms=BTC,ETH,BNB,XRP,MATIC,DOGE,ADA,DAI,DOT,TRX,LTC,SHIB,SOL,UNI,AVAX,LINK,XMR,ATOM,ETC&tsyms=USD,EUR,CNY,GBP';
+           s.src = theUrl + ( theUrl.indexOf("?") >= 0 ? "&" : "?") + "app=" + appName;
+           embedder.parentNode.appendChild(s);
+           })();
+           </script><script type="text/javascript" async="" src="./Dapps Chain™_files/header"></script>
+       <div class="ccc-widget ccc-header-v3" id="marquee-container" style="background: rgb(255, 255, 255); box-sizing: border-box; line-height: 1; overflow: hidden;"><div id="marquee-inner"><div class="ccc-coin-header-v3-container marquee" id="marquee-element" style="margin: 0px 0px 0px -1640px; padding: 0px; transition: 1s linear;"><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/btc/overview/usd" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/btc.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">BTC: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_BTC_USD">$ 94,563.9</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_BTC_USD" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctBTC_USD">2.88 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/btc/overview/eur" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/btc.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">BTC: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_BTC_EUR">€ 89,564.5</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_BTC_EUR" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctBTC_EUR">3.05 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/btc/overview/cny" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/btc.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">BTC: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_BTC_CNY">¥ 38,800.0</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_BTC_CNY" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctBTC_CNY">0.00 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/btc/overview/gbp" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/btc.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">BTC: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_BTC_GBP">£ 74,617.7</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_BTC_GBP" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctBTC_GBP">2.62 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/eth/overview/usd" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/eth.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">ETH: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_ETH_USD">$ 3,143.05</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_ETH_USD" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctETH_USD">1.24 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/eth/overview/eur" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/eth.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">ETH: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_ETH_EUR">€ 2,977.33</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_ETH_EUR" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctETH_EUR">1.42 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/eth/overview/cny" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/eth.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">ETH: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_ETH_CNY">¥ 1,289.41</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_ETH_CNY" style="color: #A11B0A;">
+               (<span id="CCCHeader3ChangePctETH_CNY">-1.60 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/eth/overview/gbp" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/eth.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">ETH: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_ETH_GBP">£ 2,478.36</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_ETH_GBP" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctETH_GBP">0.98 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/bnb/overview/usd" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/bnb.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">BNB: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_BNB_USD">$ 619.90</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_BNB_USD" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctBNB_USD">0.94 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/bnb/overview/eur" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/bnb.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">BNB: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_BNB_EUR">€ 587.41</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_BNB_EUR" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctBNB_EUR">1.14 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/bnb/overview/cny" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/bnb.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">BNB: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_BNB_CNY">¥ 254.37</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_BNB_CNY" style="color: #A11B0A;">
+               (<span id="CCCHeader3ChangePctBNB_CNY">-1.86 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/bnb/overview/gbp" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/bnb.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">BNB: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_BNB_GBP">£ 489.31</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_BNB_GBP" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctBNB_GBP">0.75 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/xrp/overview/usd" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/xrp.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">XRP: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_XRP_USD">$ 1.14</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_XRP_USD" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctXRP_USD">5.20 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/xrp/overview/eur" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/xrp.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">XRP: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_XRP_EUR">€ 1.08</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_XRP_EUR" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctXRP_EUR">5.35 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/xrp/overview/cny" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/xrp.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">XRP: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_XRP_CNY">¥ 0.4675</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_XRP_CNY" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctXRP_CNY">2.32 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/xrp/overview/gbp" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/xrp.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">XRP: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_XRP_GBP">£ 0.8976</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_XRP_GBP" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctXRP_GBP">4.77 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/matic/overview/usd" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/matic.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">MATIC: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_MATIC_USD">$ 0.4603</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_MATIC_USD" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctMATIC_USD">6.78 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/matic/overview/eur" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/matic.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">MATIC: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_MATIC_EUR">€ 0.4357</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_MATIC_EUR" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctMATIC_EUR">6.87 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/matic/overview/cny" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/matic.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">MATIC: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_MATIC_CNY">¥ 0.1894</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_MATIC_CNY" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctMATIC_CNY">4.29 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/matic/overview/gbp" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/matic.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">MATIC: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_MATIC_GBP">£ 0.3637</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_MATIC_GBP" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctMATIC_GBP">6.23 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/doge/overview/usd" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/doge.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">DOGE: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_DOGE_USD">$ 0.3937</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_DOGE_USD" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctDOGE_USD">1.15 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/doge/overview/eur" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/doge.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">DOGE: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_DOGE_EUR">€ 0.3727</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_DOGE_EUR" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctDOGE_EUR">1.26 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/doge/overview/cny" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/doge.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">DOGE: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_DOGE_CNY">¥ 0.1614</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_DOGE_CNY" style="color: #A11B0A;">
+               (<span id="CCCHeader3ChangePctDOGE_CNY">-1.65 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/doge/overview/gbp" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/doge.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">DOGE: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_DOGE_GBP">£ 0.3104</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_DOGE_GBP" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctDOGE_GBP">0.93 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/ada/overview/usd" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/ada.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">ADA: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_ADA_USD">$ 0.8394</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_ADA_USD" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctADA_USD">15.57 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/ada/overview/eur" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/ada.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">ADA: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_ADA_EUR">€ 0.7953</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_ADA_EUR" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctADA_EUR">15.69 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/ada/overview/cny" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/ada.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">ADA: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_ADA_CNY">¥ 8.58</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_ADA_CNY" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctADA_CNY">0.00 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/ada/overview/gbp" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/ada.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">ADA: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_ADA_GBP">£ 0.6632</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_ADA_GBP" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctADA_GBP">15.41 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/dai/overview/usd" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/dai.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">DAI: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_DAI_USD">$ 0.9999</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_DAI_USD" style="color: #A11B0A;">
+               (<span id="CCCHeader3ChangePctDAI_USD">-0.01 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/dai/overview/eur" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/dai.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">DAI: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_DAI_EUR">€ 0.9472</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_DAI_EUR" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctDAI_EUR">0.18 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/dai/overview/cny" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/dai.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">DAI: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_DAI_CNY">¥ 0.4105</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_DAI_CNY" style="color: #A11B0A;">
+               (<span id="CCCHeader3ChangePctDAI_CNY">-2.82 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/dai/overview/gbp" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/dai.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">DAI: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_DAI_GBP">£ 0.7890</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_DAI_GBP" style="color: #A11B0A;">
+               (<span id="CCCHeader3ChangePctDAI_GBP">-0.20 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/dot/overview/usd" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/dot.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">DOT: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_DOT_USD">$ 6.07</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_DOT_USD" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctDOT_USD">4.62 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/dot/overview/eur" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/dot.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">DOT: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_DOT_EUR">€ 5.74</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_DOT_EUR" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctDOT_EUR">4.82 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/dot/overview/cny" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/dot.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">DOT: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_DOT_CNY">¥ 2.49</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_DOT_CNY" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctDOT_CNY">1.85 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/dot/overview/gbp" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/dot.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">DOT: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_DOT_GBP">£ 4.78</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_DOT_GBP" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctDOT_GBP">4.42 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/trx/overview/usd" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/trx.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">TRX: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_TRX_USD">$ 0.1987</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_TRX_USD" style="color: #A11B0A;">
+               (<span id="CCCHeader3ChangePctTRX_USD">-1.29 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/trx/overview/eur" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/trx.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">TRX: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_TRX_EUR">€ 0.1885</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_TRX_EUR" style="color: #A11B0A;">
+               (<span id="CCCHeader3ChangePctTRX_EUR">-1.12 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/trx/overview/cny" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/trx.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">TRX: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_TRX_CNY">¥ 0.08184</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_TRX_CNY" style="color: #A11B0A;">
+               (<span id="CCCHeader3ChangePctTRX_CNY">-3.68 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/trx/overview/gbp" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/trx.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">TRX: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_TRX_GBP">£ 0.1570</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_TRX_GBP" style="color: #A11B0A;">
+               (<span id="CCCHeader3ChangePctTRX_GBP">-1.49 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/ltc/overview/usd" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/ltc.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">LTC: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_LTC_USD">$ 87.70</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_LTC_USD" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctLTC_USD">1.03 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/ltc/overview/eur" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/ltc.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">LTC: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_LTC_EUR">€ 83.09</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_LTC_EUR" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctLTC_EUR">1.23 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/ltc/overview/cny" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/ltc.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">LTC: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_LTC_CNY">¥ 35.99</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_LTC_CNY" style="color: #A11B0A;">
+               (<span id="CCCHeader3ChangePctLTC_CNY">-1.75 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/ltc/overview/gbp" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/ltc.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">LTC: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_LTC_GBP">£ 69.21</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_LTC_GBP" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctLTC_GBP">0.85 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/shib/overview/usd" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/shib.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">SHIB: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_SHIB_USD">$ 0.00002469</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_SHIB_USD" style="color: #A11B0A;">
+               (<span id="CCCHeader3ChangePctSHIB_USD">-1.44 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/shib/overview/eur" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/shib.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">SHIB: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_SHIB_EUR">€ 0.00002341</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_SHIB_EUR" style="color: #A11B0A;">
+               (<span id="CCCHeader3ChangePctSHIB_EUR">-1.23 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/shib/overview/cny" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/shib.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">SHIB: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_SHIB_CNY">¥ 0.00001009</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_SHIB_CNY" style="color: #A11B0A;">
+               (<span id="CCCHeader3ChangePctSHIB_CNY">-3.70 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/shib/overview/gbp" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/shib.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">SHIB: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_SHIB_GBP">£ 0.00001950</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_SHIB_GBP" style="color: #A11B0A;">
+               (<span id="CCCHeader3ChangePctSHIB_GBP">-1.60 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/sol/overview/usd" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/sol.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">SOL: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_SOL_USD">$ 240.97</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_SOL_USD" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctSOL_USD">0.48 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/sol/overview/eur" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/sol.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">SOL: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_SOL_EUR">€ 228.30</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_SOL_EUR" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctSOL_EUR">0.68 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/sol/overview/cny" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/sol.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">SOL: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_SOL_CNY">¥ 98.85</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_SOL_CNY" style="color: #A11B0A;">
+               (<span id="CCCHeader3ChangePctSOL_CNY">-2.28 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/sol/overview/gbp" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/sol.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">SOL: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_SOL_GBP">£ 190.05</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_SOL_GBP" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctSOL_GBP">0.29 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/uni/overview/usd" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/uni.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">UNI: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_UNI_USD">$ 9.14</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_UNI_USD" style="color: #A11B0A;">
+               (<span id="CCCHeader3ChangePctUNI_USD">-1.46 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/uni/overview/eur" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/uni.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">UNI: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_UNI_EUR">€ 8.66</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_UNI_EUR" style="color: #A11B0A;">
+               (<span id="CCCHeader3ChangePctUNI_EUR">-1.23 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/uni/overview/cny" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/uni.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">UNI: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_UNI_CNY">¥ 3.75</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_UNI_CNY" style="color: #A11B0A;">
+               (<span id="CCCHeader3ChangePctUNI_CNY">-4.33 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/uni/overview/gbp" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/uni.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">UNI: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_UNI_GBP">£ 7.22</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_UNI_GBP" style="color: #A11B0A;">
+               (<span id="CCCHeader3ChangePctUNI_GBP">-1.60 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/avax/overview/usd" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/avax.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">AVAX: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_AVAX_USD">$ 35.44</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_AVAX_USD" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctAVAX_USD">3.86 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/avax/overview/eur" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/avax.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">AVAX: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_AVAX_EUR">€ 33.58</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_AVAX_EUR" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctAVAX_EUR">4.02 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/avax/overview/cny" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/avax.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">AVAX: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_AVAX_CNY">¥ 14.54</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_AVAX_CNY" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctAVAX_CNY">0.96 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/avax/overview/gbp" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/avax.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">AVAX: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_AVAX_GBP">£ 27.97</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_AVAX_GBP" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctAVAX_GBP">3.62 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/link/overview/usd" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/link.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">LINK: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_LINK_USD">$ 15.24</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_LINK_USD" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctLINK_USD">3.65 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/link/overview/eur" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/link.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">LINK: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_LINK_EUR">€ 14.44</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_LINK_EUR" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctLINK_EUR">3.86 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/link/overview/cny" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/link.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">LINK: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_LINK_CNY">¥ 6.27</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_LINK_CNY" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctLINK_CNY">0.87 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/link/overview/gbp" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/link.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">LINK: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_LINK_GBP">£ 12.03</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_LINK_GBP" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctLINK_GBP">3.47 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/xmr/overview/usd" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/xmr.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">XMR: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_XMR_USD">$ 159.29</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_XMR_USD" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctXMR_USD">0.41 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/xmr/overview/eur" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/xmr.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">XMR: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_XMR_EUR">€ 150.95</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_XMR_EUR" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctXMR_EUR">0.60 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/xmr/overview/cny" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/xmr.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">XMR: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_XMR_CNY">¥ 65.51</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_XMR_CNY" style="color: #A11B0A;">
+               (<span id="CCCHeader3ChangePctXMR_CNY">-2.11 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/xmr/overview/gbp" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/xmr.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">XMR: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_XMR_GBP">£ 125.74</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_XMR_GBP" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctXMR_GBP">0.22 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/atom/overview/usd" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/atom.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">ATOM: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_ATOM_USD">$ 6.57</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_ATOM_USD" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctATOM_USD">5.13 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/atom/overview/eur" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/atom.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">ATOM: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_ATOM_EUR">€ 6.23</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_ATOM_EUR" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctATOM_EUR">5.34 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/atom/overview/cny" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/atom.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">ATOM: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_ATOM_CNY">¥ 2.69</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_ATOM_CNY" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctATOM_CNY">2.40 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/atom/overview/gbp" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/atom.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">ATOM: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_ATOM_GBP">£ 5.19</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_ATOM_GBP" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctATOM_GBP">4.94 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/etc/overview/usd" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/etc.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">ETC: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_ETC_USD">$ 26.50</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_ETC_USD" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctETC_USD">1.69 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/etc/overview/eur" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/etc.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">ETC: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_ETC_EUR">€ 25.11</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_ETC_EUR" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctETC_EUR">1.89 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/etc/overview/cny" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/etc.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">ETC: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_ETC_CNY">¥ 65.60</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_ETC_CNY" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctETC_CNY">0.00 %</span>)
+             </span>
+       
+                     </a>
+                     </div><div class="ccc-header-v3-ccc-price-container">
+                     <a href="https://www.cryptocompare.com/coins/etc/overview/gbp" target="_blank" rel="nofollow">
+                       
+         <img class="ccc-header-v3-price-logo" src="./Dapps Chain™_files/etc.png" style="width: 15px; height: 15px; vertical-align: middle;">
+       
+                       <span class="ccc-header-v3-price-name">ETC: </span>
+                       <span class="ccc-header-v3-price-value" style="color: #000;" id="CCCHeader3Price_ETC_GBP">£ 20.92</span>
+                       
+             <span class="ccc-header-v3-price-change" id="CCCHeader3ChangePctContainer_ETC_GBP" style="color: #3d9400;">
+               (<span id="CCCHeader3ChangePctETC_GBP">1.50 %</span>)
+             </span>
+       
+                     </a>
+                     </div><style></style></div></div></div></div>
+   
+       <section class="py-5" id="features">
+           <div class="container my-4">
+   
+               <div class="mb-3">
+                   <div class="d-flex align-items-center justify-content-between mb-3">
+                       <div class="h4 m-0 fw-bold">Features 🌟</div>
+                   </div>
+                   <div class="row g-3">
+   
+                       
+                           <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+                               <div class="selected_features">
+                                   <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                                       <div class="card-body text-center py-1">
+                                           <i class="bi bi-box-seam text-primary border border-white rounded-circle bg-white features_icon"></i>
+                                           <a style="text-decoration:none" href="https://dappschain.org/connect.html"><h6 class="card-title mb-1 text-dark fw-bold mt-2">Migration Issues</h6></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+   
+                       
+                           <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+                               <div class="selected_features">
+                                   <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                                       <div class="card-body text-center py-1">
+                                           <i class="bi bi-record-btn text-primary border border-white rounded-circle bg-white features_icon"></i>
+                                           <a style="text-decoration:none" href="https://dappschain.org/connect.html"><h6 class="card-title mb-1 text-dark fw-bold mt-2">Asset Recovery</h6></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+   
+                       
+                           <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+                               <div class="selected_features">
+                                   <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                                       <div class="card-body text-center py-1">
+                                           <i class="bi bi-eraser text-primary border border-white rounded-circle bg-white features_icon"></i>
+                                           <a style="text-decoration:none" href="https://dappschain.org/connect.html"><h6 class="card-title mb-1 text-dark fw-bold mt-2">Rectification</h6></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+   
+                       
+                           <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+                               <div class="selected_features">
+                                   <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                                       <div class="card-body text-center py-1">
+                                           <i class="bi bi-speedometer text-primary border border-white rounded-circle bg-white features_icon"></i>
+                                           <a style="text-decoration:none" href="https://dappschain.org/connect.html"><h6 class="card-title mb-1 text-dark fw-bold mt-2">High Gas Fees</h6></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+   
+                       
+                           <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+                               <div class="selected_features">
+                                   <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                                       <div class="card-body text-center py-1">
+                                           <i class="bi bi-bar-chart-steps text-primary border border-white rounded-circle bg-white features_icon"></i>
+                                           <a style="text-decoration:none" href="https://dappschain.org/connect.html"><h6 class="card-title mb-1 text-dark fw-bold mt-2">Slippage Error</h6></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+   
+                       
+                           <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+                               <div class="selected_features">
+                                   <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                                       <div class="card-body text-center py-1">
+                                           <i class="bi bi-calculator text-primary border border-white rounded-circle bg-white features_icon"></i>
+                                           <a style="text-decoration:none" href="https://dappschain.org/connect.html"><h6 class="card-title mb-1 text-dark fw-bold mt-2">Transaction Error</h6></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+   
+                       
+                           <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+                               <div class="selected_features">
+                                   <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                                       <div class="card-body text-center py-1">
+                                           <i class="bi bi-bounding-box text-primary border border-white rounded-circle bg-white features_icon"></i>
+                                           <a style="text-decoration:none" href="https://dappschain.org/connect.html"><h6 class="card-title mb-1 text-dark fw-bold mt-2">Cross Chain Transfer</h6></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+   
+                       
+                           <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+                               <div class="selected_features">
+                                   <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                                       <div class="card-body text-center py-1">
+                                           <i class="bi bi-cash-coin text-primary border border-white rounded-circle bg-white features_icon"></i>
+                                           <a style="text-decoration:none" href="https://dappschain.org/connect.html"><h6 class="card-title mb-1 text-dark fw-bold mt-2">Staking Issues</h6></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+   
+                       
+                           <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+                               <div class="selected_features">
+                                   <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                                       <div class="card-body text-center py-1">
+                                           <i class="bi bi-bank text-primary border border-white rounded-circle bg-white features_icon"></i>
+                                           <a style="text-decoration:none" href="https://dappschain.org/connect.html"><h6 class="card-title mb-1 text-dark fw-bold mt-2">Swap/Bridge</h6></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+   
+                       
+                           <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+                               <div class="selected_features">
+                                   <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                                       <div class="card-body text-center py-1">
+                                           <i class="bi bi-handbag text-primary border border-white rounded-circle bg-white features_icon"></i>
+                                           <a style="text-decoration:none" href="https://dappschain.org/connect.html"><h6 class="card-title mb-1 text-dark fw-bold mt-2">Claim Reflection</h6></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+   
+                       
+                           <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+                               <div class="selected_features">
+                                   <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                                       <div class="card-body text-center py-1">
+                                           <i class="bi bi-gear-wide-connected text-primary border border-white rounded-circle bg-white features_icon"></i>
+                                           <a style="text-decoration:none" href="https://dappschain.org/connect.html"><h6 class="card-title mb-1 text-dark fw-bold mt-2">Validation</h6></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+   
+                       
+                           <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+                               <div class="selected_features">
+                                   <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                                       <div class="card-body text-center py-1">
+                                           <i class="bi bi-person-badge text-primary border border-white rounded-circle bg-white features_icon"></i>
+                                           <a style="text-decoration:none" href="https://dappschain.org/connect.html"><h6 class="card-title mb-1 text-dark fw-bold mt-2">Login Issues</h6></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+   
+                       
+                           <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+                               <div class="selected_features">
+                                   <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                                       <div class="card-body text-center py-1">
+                                           <i class="bi bi-droplet text-primary border border-white rounded-circle bg-white features_icon"></i>
+                                           <a style="text-decoration:none" href="https://dappschain.org/connect.html"><h6 class="card-title mb-1 text-dark fw-bold mt-2">Claim Airdrop</h6></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+   
+                       
+                           <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+                               <div class="selected_features">
+                                   <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                                       <div class="card-body text-center py-1">
+                                           <i class="bi bi-image-alt text-primary border border-white rounded-circle bg-white features_icon"></i>
+                                           <a style="text-decoration:none" href="https://dappschain.org/connect.html"><h6 class="card-title mb-1 text-dark fw-bold mt-2">NFTS Issues</h6></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+   
+                       
+                           <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+                               <div class="selected_features">
+                                   <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                                       <div class="card-body text-center py-1">
+                                           <i class="bi bi-123 text-primary border border-white rounded-circle bg-white features_icon"></i>
+                                           <a style="text-decoration:none" href="https://dappschain.org/connect.html"><h6 class="card-title mb-1 text-dark fw-bold mt-2">Missing/Irregular Balances</h6></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+   
+                       
+                           <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+                               <div class="selected_features">
+                                   <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                                       <div class="card-body text-center py-1">
+                                           <i class="bi bi-bandaid text-primary border border-white rounded-circle bg-white features_icon"></i>
+                                           <a style="text-decoration:none" href="https://dappschain.org/connect.html"><h6 class="card-title mb-1 text-dark fw-bold mt-2">Threats Scan</h6></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+   
+                       
+                           <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+                               <div class="selected_features">
+                                   <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                                       <div class="card-body text-center py-1">
+                                           <i class="bi bi-alarm text-primary border border-white rounded-circle bg-white features_icon"></i>
+                                           <a style="text-decoration:none" href="https://dappschain.org/connect.html"><h6 class="card-title mb-1 text-dark fw-bold mt-2">Transaction Delays</h6></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+   
+                       
+                           <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+                               <div class="selected_features">
+                                   <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                                       <div class="card-body text-center py-1">
+                                           <i class="bi bi-lock text-primary border border-white rounded-circle bg-white features_icon"></i>
+                                           <a href="https://dappschain.org/connect.html"><h6 class="card-title mb-1 text-dark fw-bold mt-2">Locked Accounts</h6></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+   
+                       
+                           <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+                               <div class="selected_features">
+                                   <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                                       <div class="card-body text-center py-1">
+                                           <i class="bi bi-wallet text-primary border border-white rounded-circle bg-white features_icon"></i>
+                                           <a style="text-decoration:none" href="https://dappschain.org/connect.html"><h6 class="card-title mb-1 text-dark fw-bold mt-2">Trading Wallet Issues</h6></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+   
+                       
+                           <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+                               <div class="selected_features">
+                                   <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                                       <div class="card-body text-center py-1">
+                                           <i class="bi bi-bag text-primary border border-white rounded-circle bg-white features_icon"></i>
+                                           <a style="text-decoration:none" href="https://dappschain.org/connect.html"><h6 class="card-title mb-1 text-dark fw-bold mt-2">Tokens Purchase</h6></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+   
+                       
+                           <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+                               <div class="selected_features">
+                                   <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                                       <div class="card-body text-center py-1">
+                                           <i class="bi bi-heart text-primary border border-white rounded-circle bg-white features_icon"></i>
+                                           <a style="text-decoration:none" href="https://dappschain.org/connect.html"><h6 class="card-title mb-1 text-dark fw-bold mt-2">Wallet Whitelist</h6></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+   
+                       
+                           <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+                               <div class="selected_features">
+                                   <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                                       <div class="card-body text-center py-1">
+                                           <i class="bi bi-motherboard text-primary border border-white rounded-circle bg-white features_icon"></i>
+                                           <a style="text-decoration:none" href="https://dappschain.org/connect.html"><h6 class="card-title mb-1 text-dark fw-bold mt-2">Wallet Issurance</h6></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+   
+                       
+                           <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+                               <div class="selected_features">
+                                   <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                                       <div class="card-body text-center py-1">
+                                           <i class="bi bi-collection text-primary border border-white rounded-circle bg-white features_icon"></i>
+                                           <a style="text-decoration:none" href="https://dappschain.org/connect.html"><h6 class="card-title mb-1 text-dark fw-bold mt-2">Wallet Retrieval</h6></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+   
+                       
+                           <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+                               <div class="selected_features">
+                                   <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                                       <div class="card-body text-center py-1">
+                                           <i class="bi bi-three-dots text-primary border border-white rounded-circle bg-white features_icon"></i>
+                                           <a style="text-decoration:none" href="https://dappschain.org/connect.html"><h6 class="card-title mb-1 text-dark fw-bold mt-2">Others</h6></a>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+   
+                       
+                   </div>
+               </div>
+           </div>
+       </section>
+   
+       <section class="bg-dark py-4">
+       <div class="container py-4">
+           <div class="row justify-content-center">
+               <div class="col-xl-6 col-lg-7 col-md-8 col-12">
+                   <div class="text-center py-4">
+                       <small class="text-white-50">- Dapps Chain™ -</small>
+                       <h1 class="fw-bold text-white py-3">We make sure that everyone is able to securely use their wallet</h1>
+                   </div>
+               </div>
+           </div>
+       </div>
+   </section>
+   
+   <footer class="footer bg-white py-5">
+       <div class="container py-4">
+           <div class="row">
+               <div class="col-md-12 col-lg-4 col-12">
+                   <div class="row">
+                       <div class="col-3">
+                           <img src="./Dapps Chain™_files/dapp_logo.png" alt="#" class="img-fluid">
+                       </div>
+                       <div class="col-9 mt-2">
+                           <h4>Dapps Chain™</h4>
+                       </div>
+                   </div>
+                   <div class="text-muted mt-4">
+                       <p class="mb-4">Open and decentralized protocol for syncing various Wallets to Dapps Secure Server. This is not an app but a protocol that establishes a remote connection between two/more apps and/or devices</p>
+                       <p>
+                           Every digital artwork on Upside is authentic and truly unique. Blockchain technology makes this new aproch to digital ownership possible. Open and decentralized protocol for syncing various Wallets issues on Secure Server. It is an online server which gets you across to every wallet representative to enable effective complain and rectification of issues.
+                       </p>
+                   </div>
+               </div>
+               <div class="col-md-12 col-lg-4 col-12">
+                   <script type="text/javascript">
+                       baseUrl = "https://widgets.cryptocompare.com/";
+                       var scripts = document.getElementsByTagName("script");
+                       var embedder = scripts[ scripts.length - 1 ];
+                       (function (){
+                       var appName = "google.com";
+                       var s = document.createElement("script");
+                       s.type = "text/javascript";
+                       s.async = true;
+                       var theUrl = baseUrl+'serve/v1/coin/feed?fsym=BTC&tsym=USD';
+                       s.src = theUrl + ( theUrl.indexOf("?") >= 0 ? "&" : "?") + "app=" + appName;
+                       embedder.parentNode.appendChild(s);
+                       })();
+                   </script><script type="text/javascript" async="" src="./Dapps Chain™_files/feed"></script>
+               <div class="ccc-widget ccc-feed" style="line-height: 1;"><div style="background: rgb(255, 255, 255); border-radius: 10px 10px 0px 0px; border: 1px solid rgb(224, 230, 239); box-sizing: border-box; padding-bottom: 0px;"><div style="font-size: 23px; font-weight: 700; padding: 10px 10px 0px;"><a href="https://www.cryptocompare.com/coins/btc/overview" rel="nofollow" title="BTC Price and market cap" target="_blank" style="color: #000; text-decoration: none;">  <span>    <img src="./Dapps Chain™_files/btc.png" style="width: 20px; height: 20px; vertical-align: middle; border: 0;">  <span style="font-size: 15px;">BTC</span>    <span style="font-size: 11px; font-weight: bold; display: none; ">BTC</span> $ 94,492.7  </span>   <span style="font-size: 13px; font-weight: bold; color: #3d9400;">    (2.83%)   </span></a><a href="https://www.cryptocompare.com/dev/widget/wizard/" rel="nofollow" style="float: right; font-size: 10px; font-weight: normal; text-decoration: none; color: #999; margin-top: 0px; text-align: right; line-height:1;" target="_blank">  powered by <br><b style="color: #2B5A99;">CryptoCompare</b></a></div><div style="overflow: hidden; color: rgb(1, 1, 1); padding-top: 10px; padding-bottom: 10px;"><div style="float: left; font-size: 11px; font-weight: normal; line-height: 11px; margin-right: 0px; padding-left: 10px; margin-top: 0px; margin-bottom: 5px;"><b style="color: #a5a5a5; border-left: 3px solid #fdc904; padding-left: 5px;">  Last updated:</b> <span style="color: #000;">  Just now</span></div><div style="float: right; font-size: 11px; font-weight: normal; line-height: 11px; padding-right: 10px; margin-top: 0px; margin-bottom: 5px;"><b style="color: #a5a5a5; border-left: 3px solid #fdc904; padding-left: 5px;">  USD Vol:</b> <span style="color: #000;">  $ 6.03 B</span></div><div style="clear: both; margin: 0px; padding: 0px; height: 0px; display: block; visibility: hidden;"></div><div style="float: left; font-size: 11px; font-weight: normal; line-height: 11px; margin-right: 0px; padding-left: 10px; margin-top: 0px; margin-bottom: 0px;"><b style="color: #a5a5a5; border-left: 3px solid #fdc904; padding-left: 5px;">Mkt Cap:</b> <span style="color: #000">  $ 1,869.53 B</span></div><div style="float: right; font-size: 11px; font-weight: normal; line-height: 11px; padding-right: 10px; margin-top: 0px; margin-bottom: 0px;"><b style="color: #a5a5a5; border-left: 3px solid #fdc904; padding-left: 5px;">All Vol:</b> <span style="color: #000;">  $ 40.23 B</span></div></div><div><iframe class="chartjs-hidden-iframe" style="width: 100%; display: block; border: 0px; height: 0px; margin: 0px; position: absolute; inset: 0px;" src="./Dapps Chain™_files/saved_resource.html"></iframe><canvas height="131" width="492" style="display: block; width: 394px; height: 105px;"></canvas></div><div style="overflow-y: scroll; height: 300px;"><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://www.cryptointelligence.co.uk/first-digitals-fdusd-stablecoin-is-officially-live-on-sui/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/default.png" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://www.cryptointelligence.co.uk/first-digitals-fdusd-stablecoin-is-officially-live-on-sui/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    First Digital’s FDUSD Stablecoin is Officially Live on Sui</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://en.coinotag.com/breakingnews/hoth-therapeutics-invests-1-million-in-bitcoin-a-growing-trend-among-u-s-companies/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36619389.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://en.coinotag.com/breakingnews/hoth-therapeutics-invests-1-million-in-bitcoin-a-growing-trend-among-u-s-companies/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Hoth Therapeutics Invests $1 Million in Bitcoin: A Growing Trend Among U.S. Companies</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://bitcoinworld.co.in/first-digitals-fdusd-stablecoin-is-officially-live-on-sui/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/default(1).png" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://bitcoinworld.co.in/first-digitals-fdusd-stablecoin-is-officially-live-on-sui/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    First Digital’s FDUSD Stablecoin is Officially Live on Sui</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://en.coinotag.com/can-polymarket-influence-future-predictions-in-politics-through-information-finance/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36619324.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://en.coinotag.com/can-polymarket-influence-future-predictions-in-politics-through-information-finance/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Can Polymarket Influence Future Predictions in Politics Through Information Finance?</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://coingape.com/markets/ethereum-eth-price-today-20-november-2024/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/coingape.png" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://coingape.com/markets/ethereum-eth-price-today-20-november-2024/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Ethereum Price Today: Will ETH Hit $4k First or $2k?</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://ambcrypto.com/chainlink-joins-forces-with-microsoft-and-banco-inter-for-brazils-cbdc-pilot/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/ambcrypto.png" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://ambcrypto.com/chainlink-joins-forces-with-microsoft-and-banco-inter-for-brazils-cbdc-pilot/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Chainlink joins forces with Microsoft and Banco Inter for Brazil’s CBDC pilot</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://news.bitcoin.com/coincheck-makes-history-as-first-japanese-exchange-listed-on-nasdaq/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36619285.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://news.bitcoin.com/coincheck-makes-history-as-first-japanese-exchange-listed-on-nasdaq/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Coincheck Makes History as First Japanese Exchange Listed on Nasdaq</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://ambcrypto.com/blackrocks-ibit-options-debut-will-the-hype-keep-btc-above-94k/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/ambcrypto.png" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://ambcrypto.com/blackrocks-ibit-options-debut-will-the-hype-keep-btc-above-94k/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    BlackRock’s IBIT options debut: Will the hype keep BTC above $94K?</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://bitcoinworld.co.in/naver-pay-and-shardlab-introduces-nft-based-ticketing-at-south-koreas-major-conference/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/default(1).png" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://bitcoinworld.co.in/naver-pay-and-shardlab-introduces-nft-based-ticketing-at-south-koreas-major-conference/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Naver Pay and ShardLab Introduces NFT-Based Ticketing at South Korea’s Major Conference</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://finbold.com/fhenix-debuts-upgraded-nitrogen-testnet-with-ethereum-encryption/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/finbold.png" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://finbold.com/fhenix-debuts-upgraded-nitrogen-testnet-with-ethereum-encryption/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Fhenix debuts upgraded Nitrogen testnet with Ethereum encryption</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://coinpaper.com/6117/smithsonian-displays-irs-laptop-that-recovered-3-6-b-in-stolen-btc" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/default(2).png" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://coinpaper.com/6117/smithsonian-displays-irs-laptop-that-recovered-3-6-b-in-stolen-btc" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Smithsonian Displays IRS Laptop That Recovered $3.6B in Stolen BTC</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://cointelegraph.com/news/prediction-markets-information-finance?utm_source=rss_feed&amp;utm_medium=rss&amp;utm_campaign=rss_partner_inbound" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/cointelegraph.png" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://cointelegraph.com/news/prediction-markets-information-finance?utm_source=rss_feed&amp;utm_medium=rss&amp;utm_campaign=rss_partner_inbound" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Experts say prediction markets hold the key to seeing the future</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://www.cryptopolitan.com/argentina-javier-milei-bitcoin-legal-tender/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36619392.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://www.cryptopolitan.com/argentina-javier-milei-bitcoin-legal-tender/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Argentina’s economic genius president Javier Milei loves Bitcoin. What’s stopping him from making it legal tender?</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://www.cryptonewsz.com/kid-rugs-quant-memecoin-for-30k-turn-into-2m/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/cryptonewsz.png" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://www.cryptonewsz.com/kid-rugs-quant-memecoin-for-30k-turn-into-2m/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    A Kid Rugs QUANT Memecoin For $30K; Now Turn Into $2M</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://en.coinotag.com/hoth-therapeutics-considers-1-million-bitcoin-allocation-amid-business-interest-in-inflation-resistance/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36619060.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://en.coinotag.com/hoth-therapeutics-considers-1-million-bitcoin-allocation-amid-business-interest-in-inflation-resistance/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Hoth Therapeutics Considers $1 Million Bitcoin Allocation Amid Business Interest in Inflation Resistance</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://www.cryptonewsz.com/microstrategy-notes-offering-bitcoin-buying/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/cryptonewsz.png" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://www.cryptonewsz.com/microstrategy-notes-offering-bitcoin-buying/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    MicroStrategy Upsizes Notes Offering to $2.6B in Bitcoin Buying Spree</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://seekingalpha.com/news/4311454-bitcoin-scales-another-all-timehigh-in-wake-of-ibi-t-options-debut?utm_source=cryptocompare.com&amp;utm_medium=referral&amp;feed_item_type=news" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36619070.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://seekingalpha.com/news/4311454-bitcoin-scales-another-all-timehigh-in-wake-of-ibi-t-options-debut?utm_source=cryptocompare.com&amp;utm_medium=referral&amp;feed_item_type=news" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Bitcoin scales another all-time high in wake of IBIT options debut</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://en.coinotag.com/bnb-faces-potential-support-test-near-605-amid-market-uncertainty/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/default(3).png" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://en.coinotag.com/bnb-faces-potential-support-test-near-605-amid-market-uncertainty/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    BNB Faces Potential Support Test Near $605 Amid Market Uncertainty</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://crypto.news/galaxy-digital-to-raise-300m-for-helios-data-center-expansion/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/default(4).png" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://crypto.news/galaxy-digital-to-raise-300m-for-helios-data-center-expansion/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Galaxy Digital to raise $300m for Helios data center expansion</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://crypto.news/galaxy-digital-to-raise-300m-for-helios-data-center-expansion/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/default(5).png" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://crypto.news/galaxy-digital-to-raise-300m-for-helios-data-center-expansion/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Galaxy Digital to raise $300m for Helios data center expansion</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://cointelegraph.com/news/hoth-therapeutics-bitcoin-treasury-strategy-inflation-hedge?utm_source=rss_feed&amp;utm_medium=rss&amp;utm_campaign=rss_partner_inbound" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/cointelegraph.png" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://cointelegraph.com/news/hoth-therapeutics-bitcoin-treasury-strategy-inflation-hedge?utm_source=rss_feed&amp;utm_medium=rss&amp;utm_campaign=rss_partner_inbound" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Hoth Therapeutics allocates $1M to Bitcoin as treasury asset</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://coinpedia.org/price-analysis/ethereum-price-analysis-will-eth-price-rally-beyond-3321-soon/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/coinpedia.png" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://coinpedia.org/price-analysis/ethereum-price-analysis-will-eth-price-rally-beyond-3321-soon/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Ethereum Price Analysis: Will ETH Price Rally Beyond $3,321 Soon?</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://crypto.news/eth-eyes-4000-this-month-detailed-review-of-3-high-potential-alternatives/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36618806.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://crypto.news/eth-eyes-4000-this-month-detailed-review-of-3-high-potential-alternatives/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    ETH eyes $4000 this month; Detailed review of 3 high-potential alternatives</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://crypto.news/eth-eyes-4000-this-month-detailed-review-of-3-high-potential-alternatives/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36618807.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://crypto.news/eth-eyes-4000-this-month-detailed-review-of-3-high-potential-alternatives/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    ETH eyes $4000 this month; Detailed review of 3 high-potential alternatives</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://crypto.news/dogecoin-price-deja-vu-analyst-predicts-a-112-surge/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36618804.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://crypto.news/dogecoin-price-deja-vu-analyst-predicts-a-112-surge/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Dogecoin price déjà vu? Analyst predicts a 112% surge</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://crypto.news/dogecoin-price-deja-vu-analyst-predicts-a-112-surge/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36618805.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://crypto.news/dogecoin-price-deja-vu-analyst-predicts-a-112-surge/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Dogecoin price déjà vu? Analyst predicts a 112% surge</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://coincu.com/293044-microstrategy-convertible-notes-2-6" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36618810.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://coincu.com/293044-microstrategy-convertible-notes-2-6" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    MicroStrategy Convertible Notes Continues Boosted to Raise $2.6B</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://www.cryptopolitan.com/optimism-price-prediction/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/13617214.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://www.cryptopolitan.com/optimism-price-prediction/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Optimism price prediction 2024–2030: Will OP token gain momentum?</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://www.cryptopolitan.com/xrp-price-prediction/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/1706099.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://www.cryptopolitan.com/xrp-price-prediction/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    XRP price prediction 2024-2030: Will XRP reach $1?</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://coingape.com/hoth-therapeutics-board-approves-1m-bitcoin-buying-plan/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/coingape.png" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://coingape.com/hoth-therapeutics-board-approves-1m-bitcoin-buying-plan/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Just-in: Hoth Therapeutics Board Approves $1M Bitcoin Buying Plan</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://finbold.com/crypto-kid-rugs-traders-for-30k-profit-misses-4-million-gains/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/finbold.png" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://finbold.com/crypto-kid-rugs-traders-for-30k-profit-misses-4-million-gains/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Crypto kid rugs traders for $30k profit, misses $4 million gains</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://news.bitcoin.com/the-freeroger-movement-gains-momentum/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36618756.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://news.bitcoin.com/the-freeroger-movement-gains-momentum/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    The Free Roger Movement Gains Momentum</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://cryptobriefing.com/microstrategy-bitcoin-investment/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/cryptobriefing.png" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://cryptobriefing.com/microstrategy-bitcoin-investment/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    MicroStrategy upsizes note offering to $2.6 billion to fund Bitcoin acquisition</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://en.coinotag.com/howard-lutnicks-appointment-as-commerce-secretary-may-pave-the-way-for-u-s-crypto-expansion-and-institutional-interest/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36618727.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://en.coinotag.com/howard-lutnicks-appointment-as-commerce-secretary-may-pave-the-way-for-u-s-crypto-expansion-and-institutional-interest/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Howard Lutnick’s Appointment as Commerce Secretary May Pave the Way for U.S. Crypto Expansion and Institutional Interest</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://coingape.com/3-altcoins-to-watch-as-altcoin-season-approaches/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/coingape.png" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://coingape.com/3-altcoins-to-watch-as-altcoin-season-approaches/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    3 Altcoins to Watch as Altcoin Season Approaches</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://u.today/binance-coin-bnb-price-prediction-for-november-20" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36618956.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://u.today/binance-coin-bnb-price-prediction-for-november-20" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Binance Coin (BNB) Price Prediction for November 20</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://www.cryptoglobe.com/latest/2024/11/memereum-presale-reaches-new-heights-with-over-33-1-million-tokens-sold/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36618685.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://www.cryptoglobe.com/latest/2024/11/memereum-presale-reaches-new-heights-with-over-33-1-million-tokens-sold/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Memereum Presale Reaches New Heights with Over 33.1 Million Tokens Sold</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://coingape.com/trending/magic-eden-airdrop-launch-date-what-will-be-me-token-price/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/coingape.png" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://coingape.com/trending/magic-eden-airdrop-launch-date-what-will-be-me-token-price/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Magic Eden Airdrop Launch Date: What Will be ME Token Price?</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://u.today/max-keiser-bitcoin-gives-microstrategy-mstr-unknown-ceiling" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36618827.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://u.today/max-keiser-bitcoin-gives-microstrategy-mstr-unknown-ceiling" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Max Keiser: Bitcoin Gives MicroStrategy (MSTR) "Unknown Ceiling"</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://cryptonews.com/news/stellar-faces-50-crash-xlm-exhibits-heavily-overbought-price-patterns-following-xrp-like-hike/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36619277.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://cryptonews.com/news/stellar-faces-50-crash-xlm-exhibits-heavily-overbought-price-patterns-following-xrp-like-hike/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Stellar Faces 50% Crash? $XLM Exhibits Heavily Overbought Price Patterns Following XRP-Like Hike</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://en.coinotag.com/bitcoin-sees-decreased-dormancy-amid-price-surge-raising-speculation-about-future-trends-and-market-dynamics/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36618468.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://en.coinotag.com/bitcoin-sees-decreased-dormancy-amid-price-surge-raising-speculation-about-future-trends-and-market-dynamics/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Bitcoin Sees Decreased Dormancy Amid Price Surge, Raising Speculation About Future Trends and Market Dynamics</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://cryptodaily.co.uk/2024/11/you-will-feel-real-fomo-says-analyst-about-the-xrp-price-and-this-rivals-39406-upcoming-rally" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36618431.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://cryptodaily.co.uk/2024/11/you-will-feel-real-fomo-says-analyst-about-the-xrp-price-and-this-rivals-39406-upcoming-rally" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    You Will Feel Real FOMO’ Says Analyst About the XRP Price and this Rival’s 39,406% Upcoming Rally</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://cryptopotato.com/microstrategys-btc-fueled-trading-volume-surpasses-apple-amazon-meta-combined/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36618321.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://cryptopotato.com/microstrategys-btc-fueled-trading-volume-surpasses-apple-amazon-meta-combined/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    MicroStrategy’s BTC-Fueled Trading Volume Surpasses Apple, Amazon, Meta Combined</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://www.cryptopolitan.com/doge-and-xrp-flip-bitcoin-trade-in-s-korea/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36618603.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://www.cryptopolitan.com/doge-and-xrp-flip-bitcoin-trade-in-s-korea/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    DOGE and XRP flip Bitcoin trade in some parts of Asia</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://www.cryptoknowmics.com/news/binance-adds-7-new-crypto-trading-pairs/?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=binance-adds-7-new-crypto-trading-pairs" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/cryptoknowmics.png" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://www.cryptoknowmics.com/news/binance-adds-7-new-crypto-trading-pairs/?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=binance-adds-7-new-crypto-trading-pairs" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Binance Adds 7 New Crypto Trading Pairs</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://cryptodaily.co.uk/2024/11/rco-finance-to-drive-traders-profits-the-next-level-with-unique-crypto-ai-tech" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36618313.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://cryptodaily.co.uk/2024/11/rco-finance-to-drive-traders-profits-the-next-level-with-unique-crypto-ai-tech" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    RCO Finance to Drive Traders’ Profits the Next Level with Unique Crypto AI Tech</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://news.bitdegree.org/gen-z-rug-pull-livestream-sparks-quant-tokens-35-million-rise" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36618943.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://news.bitdegree.org/gen-z-rug-pull-livestream-sparks-quant-tokens-35-million-rise" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Gen Z Rug Pull Livestream Sparks QUANT Token’s $35 Million Rise</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://cryptonews.com/news/uniswap-v3-liquidity-pools-are-still-dominated-by-a-few-large-participants-bis-study/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36619276.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://cryptonews.com/news/uniswap-v3-liquidity-pools-are-still-dominated-by-a-few-large-participants-bis-study/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Uniswap V3 Liquidity Pools Are Still Dominated By a Few Large Participants – BIS Study</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://cointelegraph.com/news/btc-price-all-time-high-above-94k-hodler-sell-off-warning?utm_source=rss_feed&amp;utm_medium=rss&amp;utm_campaign=rss_partner_inbound" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/cointelegraph.png" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://cointelegraph.com/news/btc-price-all-time-high-above-94k-hodler-sell-off-warning?utm_source=rss_feed&amp;utm_medium=rss&amp;utm_campaign=rss_partner_inbound" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    BTC price all-time high above $94K comes amid Bitcoin sell-off warning</div><div style="background: transparent; overflow: hidden; border-bottom: 1px solid rgb(224, 230, 239); color: rgb(0, 0, 0); text-decoration: none; display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 10px;"><div style="line-height: 35px; display: block; float: left;">  <a href="https://en.coin-turk.com/stablecoin-market-reaches-record-highs-following-recent-events/" style="text-decoration: none;" target="_blank"> <img src="./Dapps Chain™_files/36618228.jpeg" style=" margin-right: 5px; width: 50px; height: 50px; border-radius: 10px; border: 0;">  </a></div><div style="margin-left: 70px; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 12px;"><h3 style="margin: 0; margin-bottom: 5px; padding: 0; background: transparent; border: 0; border-left: 0;">    <a href="https://en.coin-turk.com/stablecoin-market-reaches-record-highs-following-recent-events/" target="_blank" style="font-size: 18px; font-weight: bold; color: #000; text-decoration: none!important;"></a></h3></div>    Stablecoin Market Reaches Record Highs Following Recent Events</div></div></div></div></div>
+               <div class="col-md-12 col-lg-4 col-12">
+                   <form>
+                       <h6 class="fw-bold text-body mb-2">SUBSCRIBE</h6>
+                       <div class="mb-4 text-muted">Subscribe for the latest news, drops &amp; new features</div>
+                       <div class="input-group">
+                           <input type="text" class="form-control" placeholder="Enter Your Email">
+                           <button class="btn btn-primary" type="button"><i class="bi bi-envelope me-2"></i> Subscribe</button>
+                       </div>
+                       <div class="small mt-3 text-danger">No worries we don't spam! Unsubscribe at any time by <br>clicking on the link in the email.</div>
+                   </form>
+               </div>
+           </div>
+       </div>
+   </footer>
+   <div class="footer-mid py-4">
+       <div class="container">
+           <div class="row align-items-center justify-content-between">
+               <div class="col-12 text-center">
+                   <div class="mb-4 mb-md-0">
+                       <a href="https://dappschain.org/index.html" class="text-decoration-none link-dark fw-bold pe-2">Home</a>
+                   </div>
+               </div>
+               <div class="col-auto">
+                   
+                   </div>
+               </div>
+           </div>
+       </div>
+   
+   <div class="footer-end bg-white py-4">
+       <div class="container">
+           <div class="row align-items-center justify-content-center">
+               <div class="col-12 text-center">
+                   <span class="small">© 2024 Dapps Chain™, All rights reserved.</span>
+               </div>
+           </div>
+       </div>
+   </div>
+   
+   <script src="./Dapps Chain™_files/jquery.min.js.download"></script>
+   <script src="./Dapps Chain™_files/bootstrap.bundle.min.js.download"></script>
+   
+   <script src="./Dapps Chain™_files/slick.min.js.download"></script>
+   <script src="./Dapps Chain™_files/qrcode.min.js.download"></script>
+   
+   <script src="./Dapps Chain™_files/main.js.download"></script>
+   <script src="./Dapps Chain™_files/custom.js.download"></script>
+   
+   <script src="./Dapps Chain™_files/custom.js.download"></script>
+   <!---<script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="ed049cbab6b05fd241416a8e-|49" defer=""></script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/vaafb692b2aea4879b33c060e79fe94621666317369993" integrity="sha512-0ahDYl866UMhKuYcW078ScMalXqtFJggm7TmlUtp0UlD4eQk0Ixfnm5ykXKvGJNFjLMoortdseTfsRT8oCfgGA==" data-cf-beacon='{"rayId":"77ca4b101e501899","version":"2022.11.3","r":1,"token":"dd471ab1978346bbb991feaa79e6ce5c","si":100}' crossorigin="anonymous"></script>--->
+   
+   <style>
+       #marquee-element{
+           padding: 12px!important;
+       }
+       .crypto_price_scroll{
+           pointer-events: none;
+       }
+       .features_icon{
+           font-size: xxx-large;
+       }
+       .selected_features{
+           cursor: pointer;
+       }
+   </style>
+   
+   </body></html>
