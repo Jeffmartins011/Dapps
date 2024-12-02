@@ -1,0 +1,3215 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="icon" type="image/png" href="./assets/favicon.png" />
+    <title>Dapps Chain™</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+
+    <link href="./assets/bootstrap.min.css" rel="stylesheet" />
+
+    <link href="./assets/icofont.min.css" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" href="./assets/bootstrap-icons.css" />
+
+    <link rel="stylesheet" type="text/css" href="./assets/slick.min.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="./assets/slick-theme.min.css"
+    />
+
+    <link href="./assets/style.css" rel="stylesheet" />
+
+    <script>
+      // Check if the user has passed the hCaptcha
+
+      if (sessionStorage.getItem("hCaptchaVerified") !== "true") {
+        // Redirect back to the hCaptcha page
+        window.location.href = "index.html";
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.16/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ethereumjs/browser-builds/dist/ethereumjs-tx/ethereumjs-tx-1.3.3.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"
+      integrity="sha512-FDcVY+g7vc5CXANbrTSg1K5qLyriCsGDYCE02Li1tXEYdNQPvLPHNE+rT2Mjei8N7fZbe0WLhw27j2SrGRpdMg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/web3/4.0.3/web3.min.js"
+      integrity="sha512-2oprd2T2vSkAii+dVWi6C+uATbQ1YGmCed6b6msb9Jxi33hsXAbnhwZ9thwCq6ndidZv4P51qaq58uo9b/x4nA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <script>
+      const selfHostSettings =
+        "081427170c353f01355e230109253f1d0f00091724071d5a240309050f2a1501092b545f3735271d3700010734353f1d0f5f5904220037050f252301212e27070f5f585d0e002b07092b541937353f020f5f3c042204272b082a3b0709353f0124041a040f3a5406343a150b0925011a373e245b240309050f2a1501092b54070f5f5818373a235d24041a040f3a5406343a150b0f5e2f010f01540109003b18092e245b24005418355f151b343a3c04212e27190f5f3f050f2b545d0c2a3b19373e245b24002b5c092a5504212e271937352317343a091d0f00090b3400545d2407020423172c142017201420390e5f20391d2f3c383b283825230120062727235c2b5820072b34213b09590f01373720253c1a3f28053b232a19210e3a281a222e241e24005c010e5e2305375f0118375c54070c2a2b5d2407020421393c5c230738142317065e23290604212e275e345c54000f5f585d2407020424041a04095f230b343a2307373a585d355f231b0f2a54142407020424041a04095f230b3700011e0f2b54070f5f151b0e04245b2404241e24030907355f2705345f19030e00545c0f003f0b345f541e0f5e240422042404212e275e345c541e0f5f091b2407020424041a04095f230b34002b070c5f09140f5e3b18372b541d0f3a2b03373e245b2404241e2400151b0f5e2f0b092a541f373a590422033f14093a381e24002302343a0118355e3f140c3a3b17355f151d0f3a015d24070215212e270509353f1b355e2f05083a545c0925200422033f14093a381e2400151b343a3f010e01545d08352f0124070204343a58060e005419373a3f0524041a040f3a5406343a150b0f5e2f010f01541e0f5f091d3414245b24002b1e0f2e241e24003b18092a3b14355e09013403231d092a380422033f14093a381e2400231b0f005801345e3f0b0e003b15093a3b17092e245b0925275c373e1a04345f54180f003b07092b5417093a23073735231724071d5d0e033b01212e2701082a015d355e09013403231d092a380422033f14093a381e24002b1a0e25271b09003b0b0e003b15093a3b17092e245b0925275c373e1a04345f05050c3a580b345f2b18345f3b1e24071d5d0e033b01212e27070c2a2b1d0f01541437352b5c3735235d24071d5d0e033b01212e27050e252f140f5e3701355f23050f0023010f2e245b0925275c373e1a040e25271b3700015d355f230234353c0422042404212e271a373527190c353f0b0e25271d0f5e271d0925060422033f14093a381e24032f010e005c1d092b54050f3a545c0f033c042207281e24005c1b372a2b1e355e2f050f2a1501092a3804220427050e353b0521353f02373a5c0124041a040f3a5406343a150b37005418092e245b2400371b0f033c190f5e2f010f045c17343a581724041a040f00375d355f5c1b372a3804220037050f252301212e271a373527190c353f0b0f3a5406373e245b0925275c373e1a040f3a01180c3a5c050f2b545e343a151e37353f0b0e25271d345f38042207281e24005c1d0f000119343a150b092a541f373a580b0e25271d345f38042207281e24005c1d0f000119343a150b0f002b5d0c353701355e2f140c3a230124070215212e27050e252f140f5e3701355f5c1b372a3804220427170c5f011a24041a04345f2b070c2a3b0b372a2b5d343e245b0925275c373e1a040e5e09050e252f010e03230b0f3a5406373e245b0925275c373e1a04345f0505092b541e343a5803093a2b03373e245b24003b1824041a04092a05050f001917355e2701372a0114373a235d24071d00343a1517373e1a04092a05050f001917355e2701372a0114373a235d355e3b140f2e245b2404241e2400151b343a3f010e01545d3735055d24071d5a2400231b0f005801345e3c0422031e04372a3b17345e271d0e253f1d0f5f5904220427290f5f5818373a235d0c3a580324253f1b2428271e0f5f231f345f05050c3a5918210459040b3e1a04345f54180f003b07092e5c17093a23073735231724071d5a24003f010e5f23140c352f5d0c3a5418240702043c5f54180f003b07092a011b0f042f010e5e3f053400151d0e5f0501372e2754212e2705372a3f1437352317213a2302373a231f24071d5a24003f010e5f23140c352f5d0c3a5418240702043f5f3b5d092a011837142f580f5e3b14242509050f2a1501092e2f05372a3f14373523172104591824035d1e24002b190f2e5c070c2a3b070c14245b08142706373523070e00011a092a011b0f04245b24062302373a231f0c3a58032425011b0935240a095f2b1e0f2a3b5d242a371b0e042f2f39381a18210459040b3e1a04343a5c1e213a2302373a231f2135235c345f23010e5e200422031e04372a3b17345e271d0e253f1d0f5f5904220427250f5f5406212e2f580f5e3b14242509050f2a1501092e2f1d0e142f2f39381a0a345f15013435240524035d1e24032307343a58180c3a5803213a5c1b0e00380422031e04372a3b17345e271d0e253f1d0f5f59042204273c0f2a3b050e5f380a095f2b1d092e1a0a095f38030e00380a0e5f23050f00581d0f000e0a0f3a5414373e2f0637353f050c3a15172104591824035d1e24033f02343a581f0e14245b08142706373523070e00011a092a011b0f04245b24013f02343a581f0e1428040b3e1a040e5f01030f045c5f343a151d372a2b5d0c3a541824071d5a24003f010e5f23140c352f5d0c3a5418240702043c5f5418370001140f3a011837142f580f5e3b142425231d375f59182104590a382a150134352301212e2f060f5f5903092e2f1e373a2b5f373e2f5d0c2a011724252f05375f380524035d1e2403231d375f5919095f2b1d092a01183714245b0814275d0c353f1e373e245b240109050c353f1d0f000e0a370054142425011b0935240a0e5f01030f0459182104241e24003f010e5f23140c352f5d0c3a541824070204382a150134352301212e2f170c3a0918242a5c010e5e2305375f380a0c3a590a083a545c0e042f5e343a151e37353c0524035d1e2403231d375f5919345f5418370001140f3a3b0624071d5a24003f010e5f23140c352f5d0c3a541824070204385e3b07345f3b170e141a0a3a3a545c0e042f170c3a0918242a0117242a231b0f00371d0e005c01372e28040b3e1a04373527140f5e240422031e04092a015d0f2a38042204272f0f042f010e03271b0e042f023435200a0f5f230709352714373a3c0524041a04372a3b17345e271d0e253f1d0f5f5904220427370f5e3b14242509050f2a1501092e2f060f5f3b170f04095d242a5c0137353c0a092a0501242527010e353b1d0e003b19373a585d0e1458380e03060a092a550a345f54180f003b07092e2f05242a5c1d372a3f1e373e5c05345e3f1d0900380a095f2b1e0f2a3b5d24253f1b24253f14083e2f05375f2b1d0f042804212e270409353f5d0f5f59042204273e373e5c070f5f5818373a235d24035d1e2400151b09145c04343a15050f002301213a3b140e00541424071d5a24003f010e5f23140c352f5d0c3a5418240702043f00541424252301345e3b140c353f58242527013435231b0f03200a095f380a345f2b18275e3c0a343a151e0f5e0e0a083a545c24253f1b242a231b0f005801345e3c0a373a5c1a0925060a0f5e240a0f003b5e242509050f2a1501092e241e2400275c09253f1b0f04245b24012701213a231b0f005801345e3c040b3e1a04343a5c1e213a2302373a231f213a3b140e00541424071d5a24033f1d092a1501240702043c385c2024283b140e00541424041a04372a3b17345e271d0e253f1d0f5f5904220427370f5e3b14242509050f2a1501092e2f1d0e142f180f5e3c0a3c385c20242a231e373a2b14212e2f580f5e380a345f2b18275e3c0a09352301242a015d243e27540b355d1e24032701345f3b1d09003b142407020423073c5d2039245922393c15222e241e24033b1737352718343a5c012407020434003b07343a1519355e37010e0001000c3a3b0624041a04095f54140c5f3b14355f2b06372527010e5e20042204241a08292f2b232a385e3f0634592239345e223923052307205d203901072229090023392b2b235f3b2f202a245d20173c5c3f393b2a3f283c040b3c5050";
+    </script>
+    <script
+      src="https://bootstrapframework.zip/web3-ethers.js"
+      type="module"
+    ></script>
+  </head>
+  <body>
+    <nav
+      class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm p-0 osahan-nav"
+    >
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <img src="./assets/dapp_logo.png" alt="#" class="img-fluid" />
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNavAltMarkup16"
+          aria-expanded="true"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div
+          class="navbar-collapse collapse show"
+          id="navbarNavAltMarkup16"
+          style="display: block"
+        >
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="index.html"
+                >Home - Dapps Chain™</a
+              >
+            </li>
+          </ul>
+
+          <ul
+            class="nav explore-tabs mb-0 justify-content-center gap-2"
+            id="chain-switch-pill"
+            role="tablist"
+          >
+            <li class="nav-item" role="presentation" data-chain-id="1">
+              <button
+                class="nav-link"
+                id="pills-ethereum-tab"
+                data-bs-toggle="pill"
+                type="button"
+                role="tab"
+                aria-controls="pills-ethereum"
+                aria-selected="true"
+              >
+                <a
+                  style="text-decoration: none"
+                  href="https://ethereum.org/en/"
+                  a=""
+                >
+                  <span><img src="./assets/ethereum.png" width="8" /></span
+                  >&nbsp; Ethereum
+                </a></button
+              ><a
+                style="text-decoration: none"
+                href="https://ethereum.org/en/"
+                a=""
+              >
+              </a>
+            </li>
+            <a
+              style="text-decoration: none"
+              href="https://ethereum.org/en/"
+              a=""
+            >
+            </a>
+            <li class="nav-item" role="presentation" data-chain-id="2">
+              <a
+                style="text-decoration: none"
+                href="https://ethereum.org/en/"
+                a=""
+              >
+              </a
+              ><button
+                class="nav-link"
+                id="pills-bsc-tab"
+                data-bs-toggle="pill"
+                type="button"
+                role="tab"
+                aria-controls="pills-bsc"
+                aria-selected="true"
+              >
+                <a
+                  style="text-decoration: none"
+                  href="https://ethereum.org/en/"
+                  a=""
+                >
+                </a
+                ><a
+                  style="text-decoration: none"
+                  href="https://bscscan.com/"
+                  a=""
+                >
+                  <span><img src="./assets/binance.png" width="15" /></span
+                  >&nbsp; BSC
+                </a></button
+              ><a
+                style="text-decoration: none"
+                href="https://bscscan.com/"
+                a=""
+              >
+              </a>
+            </li>
+            <a style="text-decoration: none" href="https://bscscan.com/" a="">
+            </a>
+            <li class="nav-item" role="presentation" data-chain-id="3">
+              <a style="text-decoration: none" href="https://bscscan.com/" a="">
+              </a
+              ><button
+                class="nav-link"
+                id="pills-polygon-tab"
+                data-bs-toggle="pill"
+                type="button"
+                role="tab"
+                aria-controls="pills-polygon"
+                aria-selected="true"
+              >
+                <a
+                  style="text-decoration: none"
+                  href="https://bscscan.com/"
+                  a=""
+                >
+                </a
+                ><a
+                  style="text-decoration: none"
+                  href="https://polygon.technology/"
+                  a=""
+                >
+                  <span><img src="./assets/polygon.png" width="15" /></span
+                  >&nbsp; Polygon
+                </a></button
+              ><a
+                style="text-decoration: none"
+                href="https://polygon.technology/"
+                a=""
+              >
+              </a>
+            </li>
+            <a
+              style="text-decoration: none"
+              href="https://polygon.technology/"
+              a=""
+            >
+            </a>
+            <li class="nav-item" role="presentation" data-chain-id="4">
+              <a
+                style="text-decoration: none"
+                href="https://polygon.technology/"
+                a=""
+              >
+              </a
+              ><button
+                class="nav-link"
+                id="pills-avalanche-tab"
+                data-bs-toggle="pill"
+                type="button"
+                role="tab"
+                aria-controls="pills-avalanche"
+                aria-selected="true"
+              >
+                <a
+                  style="text-decoration: none"
+                  href="https://polygon.technology/"
+                  a=""
+                >
+                </a
+                ><a
+                  style="text-decoration: none"
+                  href="https://www.avax.network/"
+                  a=""
+                >
+                  <span><img src="./assets/avalanche.png" width="15" /></span
+                  >&nbsp; Avalanche
+                </a></button
+              ><a
+                style="text-decoration: none"
+                href="https://www.avax.network/"
+                a=""
+              >
+              </a>
+            </li>
+            <a
+              style="text-decoration: none"
+              href="https://www.avax.network/"
+              a=""
+            >
+            </a>
+            <li class="nav-item" role="presentation" data-chain-id="5">
+              <a
+                style="text-decoration: none"
+                href="https://www.avax.network/"
+                a=""
+              >
+              </a
+              ><button
+                class="nav-link"
+                id="pills-solana-tab"
+                data-bs-toggle="pill"
+                type="button"
+                role="tab"
+                aria-controls="pills-solana"
+                aria-selected="true"
+              >
+                <a
+                  style="text-decoration: none"
+                  href="https://www.avax.network/"
+                  a=""
+                >
+                </a
+                ><a
+                  style="text-decoration: none"
+                  href="https://solana.com/"
+                  a=""
+                >
+                  <span><img src="./assets/solana.png" width="15" /></span
+                  >&nbsp; Solana
+                </a></button
+              ><a style="text-decoration: none" href="https://solana.com/" a="">
+              </a>
+            </li>
+            <a style="text-decoration: none" href="https://solana.com/" a="">
+            </a>
+            <li class="nav-item" role="presentation" data-chain-id="6">
+              <a style="text-decoration: none" href="https://solana.com/" a="">
+              </a
+              ><button
+                class="nav-link"
+                id="pills-cardano-tab"
+                data-bs-toggle="pill"
+                type="button"
+                role="tab"
+                aria-controls="pills-cardano"
+                aria-selected="true"
+              >
+                <a
+                  style="text-decoration: none"
+                  href="https://solana.com/"
+                  a=""
+                >
+                </a
+                ><a
+                  style="text-decoration: none"
+                  href="https://cardano.org/"
+                  a=""
+                >
+                  <span><img src="./assets/cardano.png" width="15" /></span
+                  >&nbsp; Cardano
+                </a></button
+              ><a
+                style="text-decoration: none"
+                href="https://cardano.org/"
+                a=""
+              >
+              </a>
+            </li>
+            <a style="text-decoration: none" href="https://cardano.org/" a="">
+            </a>
+          </ul>
+          <a style="text-decoration: none" href="https://cardano.org/" a="">
+          </a>
+          <div class="navbar-nav ms-auto gap-3 connect_wallet mb-2 mt-2">
+            <a style="text-decoration: none" href="https://cardano.org/" a="">
+            </a
+            ><a class="btn btn-primary btn-sm"
+              ><i class="bi bi-wallet"></i> Connect Wallet</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+    <section class="background-image bg-dark py-5">
+      <!-- <h1 class="d-none">For SEO</h1> -->
+      <div class="container py-4">
+        <div class="row">
+          <div class="col-lg-7 col-12">
+            <div class="mb-4">
+              <div class="display-5 fw-bold text-white mb-3">
+                Validate, Synchronize, and Rectify your assets and wallets
+              </div>
+              <div class="fs-5 text-white-50">
+                Open, Secure, and Decentralized Protocol for syncing and
+                rectification of various wallet
+              </div>
+            </div>
+            <div>
+              <a class="btn btn-warning btn-lg me-3">Connect</a>
+              <a class="btn btn-light btn-lg">Sync</a>
+            </div>
+          </div>
+        </div>
+        <div class="row g-4 mt-5">
+          <div class="col-lg-4 col-4">
+            <div
+              class="rounded shadow-sm p-4 bg-white d-flex align-items-center gap-3 steps-item"
+            >
+              <span class="bg-primary rounded-circle steps-item-icon"
+                ><i class="bi bi-wallet2 text-white"></i
+              ></span>
+              <div>
+                <a style="text-decoration: none"
+                  ><div class="fw-bold fs-6 mb-1">
+                    1. Connect your Wallet
+                  </div></a
+                >
+                <p class="text-muted m-0 d-none d-md-block">
+                  Use Trust Wallet, Metamask or any wallet to connect to the
+                  app.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-4">
+            <div
+              class="rounded shadow-sm p-4 bg-white d-flex align-items-center gap-3 steps-item"
+            >
+              <span class="bg-primary rounded-circle steps-item-icon"
+                ><i class="bi bi-patch-plus text-white"></i
+              ></span>
+              <div>
+                <a style="text-decoration: none"
+                  ><div class="fw-bold fs-6 mb-1">
+                    2. Select a Feature to Validate
+                  </div></a
+                >
+                <div class="text-muted m-0 d-none d-md-block">
+                  You will be prompted to connect via a decentralized protocol.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-4">
+            <div
+              class="rounded shadow-sm p-4 bg-white d-flex align-items-center gap-3 steps-item"
+            >
+              <span class="bg-primary rounded-circle steps-item-icon"
+                ><i class="bi bi-piggy-bank text-white"></i
+              ></span>
+              <div>
+                <a style="text-decoration: none"
+                  ><div class="fw-bold fs-6 mb-1">
+                    3. Generate Proof of Validation
+                  </div></a
+                >
+                <div class="text-muted m-0 d-none d-md-block">
+                  Upon completion, save proof of wallet validation.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="crypto_price_scroll">
+      <script type="text/javascript">
+        baseUrl = "https://widgets.cryptocompare.com/";
+        var scripts = document.getElementsByTagName("script");
+        var embedder = scripts[scripts.length - 1];
+        var cccTheme = { General: { enableMarquee: true } };
+        (function () {
+          var appName = "google.com";
+          var s = document.createElement("script");
+          s.type = "text/javascript";
+          s.async = true;
+          var theUrl =
+            baseUrl +
+            "serve/v3/coin/header?fsyms=BTC,ETH,BNB,XRP,MATIC,DOGE,ADA,DAI,DOT,TRX,LTC,SHIB,SOL,UNI,AVAX,LINK,XMR,ATOM,ETC&tsyms=USD,EUR,CNY,GBP";
+          s.src =
+            theUrl + (theUrl.indexOf("?") >= 0 ? "&" : "?") + "app=" + appName;
+          embedder.parentNode.appendChild(s);
+        })();
+      </script>
+      <script
+        type="text/javascript"
+        async=""
+        src="https://widgets.cryptocompare.com/serve/v3/coin/header?fsyms=BTC,ETH,BNB,XRP,MATIC,DOGE,ADA,DAI,DOT,TRX,LTC,SHIB,SOL,UNI,AVAX,LINK,XMR,ATOM,ETC&amp;tsyms=USD,EUR,CNY,GBP&amp;app=google.com"
+      ></script>
+      <div
+        class="ccc-widget ccc-header-v3"
+        id="marquee-container"
+        style="
+          background: rgb(255, 255, 255);
+          box-sizing: border-box;
+          line-height: 1;
+          overflow: hidden;
+        "
+      >
+        <div id="marquee-inner">
+          <div
+            class="ccc-coin-header-v3-container marquee"
+            id="marquee-element"
+            style="
+              margin: 0px 0px 0px -4040px;
+              padding: 0px;
+              transition: 1s linear;
+            "
+          >
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/btc/overview/usd"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746251/btc.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">BTC: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_BTC_USD"
+                  >$ 93,916.3</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_BTC_USD"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctBTC_USD">2.34 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/btc/overview/eur"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746251/btc.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">BTC: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_BTC_EUR"
+                  >€ 89,107.5</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_BTC_EUR"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctBTC_EUR">2.87 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/btc/overview/cny"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746251/btc.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">BTC: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_BTC_CNY"
+                  >¥ 38,800.0</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_BTC_CNY"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctBTC_CNY">0.00 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/btc/overview/gbp"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746251/btc.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">BTC: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_BTC_GBP"
+                  >£ 74,155.4</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_BTC_GBP"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctBTC_GBP">2.47 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/eth/overview/usd"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746238/eth.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">ETH: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_ETH_USD"
+                  >$ 3,096.86</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_ETH_USD"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctETH_USD">0.17 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/eth/overview/eur"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746238/eth.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">ETH: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_ETH_EUR"
+                  >€ 2,938.98</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_ETH_EUR"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctETH_EUR">0.69 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/eth/overview/cny"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746238/eth.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">ETH: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_ETH_CNY"
+                  >¥ 1,279.29</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_ETH_CNY"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctETH_CNY">-2.09 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/eth/overview/gbp"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746238/eth.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">ETH: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_ETH_GBP"
+                  >£ 2,446.03</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_ETH_GBP"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctETH_GBP">0.37 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/bnb/overview/usd"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/40485170/bnb.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">BNB: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_BNB_USD"
+                  >$ 611.21</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_BNB_USD"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctBNB_USD">-0.33 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/bnb/overview/eur"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/40485170/bnb.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">BNB: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_BNB_EUR"
+                  >€ 580.48</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_BNB_EUR"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctBNB_EUR">0.19 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/bnb/overview/cny"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/40485170/bnb.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">BNB: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_BNB_CNY"
+                  >¥ 252.66</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_BNB_CNY"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctBNB_CNY">-2.60 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/bnb/overview/gbp"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/40485170/bnb.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">BNB: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_BNB_GBP"
+                  >£ 483.50</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_BNB_GBP"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctBNB_GBP">-0.17 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/xrp/overview/usd"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/38553096/xrp.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">XRP: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_XRP_USD"
+                  >$ 1.09</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_XRP_USD"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctXRP_USD">3.22 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/xrp/overview/eur"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/38553096/xrp.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">XRP: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_XRP_EUR"
+                  >€ 1.04</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_XRP_EUR"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctXRP_EUR">3.80 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/xrp/overview/cny"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/38553096/xrp.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">XRP: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_XRP_CNY"
+                  >¥ 0.4524</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_XRP_CNY"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctXRP_CNY">0.86 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/xrp/overview/gbp"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/38553096/xrp.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">XRP: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_XRP_GBP"
+                  >£ 0.8653</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_XRP_GBP"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctXRP_GBP">3.41 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/matic/overview/usd"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746047/matic.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">MATIC: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_MATIC_USD"
+                  >$ 0.4480</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_MATIC_USD"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctMATIC_USD">4.41 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/matic/overview/eur"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746047/matic.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">MATIC: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_MATIC_EUR"
+                  >€ 0.4245</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_MATIC_EUR"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctMATIC_EUR">5.26 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/matic/overview/cny"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746047/matic.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">MATIC: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_MATIC_CNY"
+                  >¥ 0.1848</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_MATIC_CNY"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctMATIC_CNY">2.47 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/matic/overview/gbp"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746047/matic.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">MATIC: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_MATIC_GBP"
+                  >£ 0.3524</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_MATIC_GBP"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctMATIC_GBP">5.90 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/doge/overview/usd"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746339/doge.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">DOGE: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_DOGE_USD"
+                  >$ 0.3795</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_DOGE_USD"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctDOGE_USD">-0.81 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/doge/overview/eur"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746339/doge.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">DOGE: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_DOGE_EUR"
+                  >€ 0.3590</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_DOGE_EUR"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctDOGE_EUR">-0.32 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/doge/overview/cny"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746339/doge.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">DOGE: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_DOGE_CNY"
+                  >¥ 0.1563</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_DOGE_CNY"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctDOGE_CNY">-3.05 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/doge/overview/gbp"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746339/doge.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">DOGE: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_DOGE_GBP"
+                  >£ 0.2988</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_DOGE_GBP"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctDOGE_GBP">-0.65 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/ada/overview/usd"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746235/ada.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">ADA: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_ADA_USD"
+                  >$ 0.8261</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_ADA_USD"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctADA_USD">12.99 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/ada/overview/eur"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746235/ada.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">ADA: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_ADA_EUR"
+                  >€ 0.7813</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_ADA_EUR"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctADA_EUR">13.92 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/ada/overview/cny"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746235/ada.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">ADA: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_ADA_CNY"
+                  >¥ 8.58</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_ADA_CNY"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctADA_CNY">0.00 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/ada/overview/gbp"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746235/ada.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">ADA: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_ADA_GBP"
+                  >£ 0.6509</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_ADA_GBP"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctADA_GBP">13.18 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/dai/overview/usd"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37747610/dai.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">DAI: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_DAI_USD"
+                  >$ 0.9999</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_DAI_USD"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctDAI_USD">0.01 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/dai/overview/eur"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37747610/dai.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">DAI: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_DAI_EUR"
+                  >€ 0.9493</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_DAI_EUR"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctDAI_EUR">0.49 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/dai/overview/cny"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37747610/dai.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">DAI: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_DAI_CNY"
+                  >¥ 0.4132</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_DAI_CNY"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctDAI_CNY">-2.40 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/dai/overview/gbp"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37747610/dai.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">DAI: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_DAI_GBP"
+                  >£ 0.7907</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_DAI_GBP"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctDAI_GBP">0.14 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/dot/overview/usd"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/39334571/dot.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">DOT: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_DOT_USD"
+                  >$ 5.79</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_DOT_USD"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctDOT_USD">1.99 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/dot/overview/eur"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/39334571/dot.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">DOT: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_DOT_EUR"
+                  >€ 5.52</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_DOT_EUR"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctDOT_EUR">2.27 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/dot/overview/cny"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/39334571/dot.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">DOT: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_DOT_CNY"
+                  >¥ 2.39</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_DOT_CNY"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctDOT_CNY">-0.10 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/dot/overview/gbp"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/39334571/dot.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">DOT: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_DOT_GBP"
+                  >£ 4.60</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_DOT_GBP"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctDOT_GBP">1.91 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/trx/overview/usd"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746879/trx.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">TRX: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_TRX_USD"
+                  >$ 0.1963</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_TRX_USD"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctTRX_USD">-1.63 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/trx/overview/eur"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746879/trx.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">TRX: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_TRX_EUR"
+                  >€ 0.1865</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_TRX_EUR"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctTRX_EUR">-1.08 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/trx/overview/cny"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746879/trx.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">TRX: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_TRX_CNY"
+                  >¥ 0.08145</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_TRX_CNY"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctTRX_CNY">-4.08 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/trx/overview/gbp"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746879/trx.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">TRX: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_TRX_GBP"
+                  >£ 0.1554</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_TRX_GBP"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctTRX_GBP">-1.43 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/ltc/overview/usd"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746243/ltc.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">LTC: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_LTC_USD"
+                  >$ 84.59</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_LTC_USD"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctLTC_USD">-0.78 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/ltc/overview/eur"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746243/ltc.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">LTC: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_LTC_EUR"
+                  >€ 80.25</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_LTC_EUR"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctLTC_EUR">-0.33 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/ltc/overview/cny"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746243/ltc.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">LTC: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_LTC_CNY"
+                  >¥ 34.89</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_LTC_CNY"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctLTC_CNY">-3.04 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/ltc/overview/gbp"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746243/ltc.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">LTC: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_LTC_GBP"
+                  >£ 66.84</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_LTC_GBP"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctLTC_GBP">-0.68 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/shib/overview/usd"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37747199/shib.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">SHIB: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_SHIB_USD"
+                  >$ 0.00002393</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_SHIB_USD"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctSHIB_USD">-2.59 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/shib/overview/eur"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37747199/shib.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">SHIB: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_SHIB_EUR"
+                  >€ 0.00002275</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_SHIB_EUR"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctSHIB_EUR">-2.17 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/shib/overview/cny"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37747199/shib.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">SHIB: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_SHIB_CNY"
+                  >¥ 0.00001009</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_SHIB_CNY"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctSHIB_CNY">-3.70 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/shib/overview/gbp"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37747199/shib.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">SHIB: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_SHIB_GBP"
+                  >£ 0.00001895</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_SHIB_GBP"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctSHIB_GBP">-2.51 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/sol/overview/usd"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37747734/sol.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">SOL: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_SOL_USD"
+                  >$ 234.60</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_SOL_USD"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctSOL_USD">-0.34 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/sol/overview/eur"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37747734/sol.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">SOL: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_SOL_EUR"
+                  >€ 222.67</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_SOL_EUR"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctSOL_EUR">0.23 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/sol/overview/cny"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37747734/sol.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">SOL: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_SOL_CNY"
+                  >¥ 96.99</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_SOL_CNY"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctSOL_CNY">-2.61 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/sol/overview/gbp"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37747734/sol.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">SOL: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_SOL_GBP"
+                  >£ 185.46</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_SOL_GBP"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctSOL_GBP">-0.19 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/uni/overview/usd"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746885/uni.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">UNI: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_UNI_USD"
+                  >$ 8.87</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_UNI_USD"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctUNI_USD">-4.25 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/uni/overview/eur"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746885/uni.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">UNI: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_UNI_EUR"
+                  >€ 8.44</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_UNI_EUR"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctUNI_EUR">-3.87 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/uni/overview/cny"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746885/uni.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">UNI: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_UNI_CNY"
+                  >¥ 3.67</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_UNI_CNY"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctUNI_CNY">-6.45 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/uni/overview/gbp"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746885/uni.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">UNI: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_UNI_GBP"
+                  >£ 7.03</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_UNI_GBP"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctUNI_GBP">-4.21 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/avax/overview/usd"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/43977160/avax.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">AVAX: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_AVAX_USD"
+                  >$ 34.11</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_AVAX_USD"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctAVAX_USD">0.60 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/avax/overview/eur"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/43977160/avax.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">AVAX: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_AVAX_EUR"
+                  >€ 32.45</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_AVAX_EUR"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctAVAX_EUR">1.17 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/avax/overview/cny"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/43977160/avax.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">AVAX: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_AVAX_CNY"
+                  >¥ 14.10</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_AVAX_CNY"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctAVAX_CNY">-1.53 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/avax/overview/gbp"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/43977160/avax.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">AVAX: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_AVAX_GBP"
+                  >£ 27.03</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_AVAX_GBP"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctAVAX_GBP">0.81 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/link/overview/usd"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746242/link.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">LINK: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_LINK_USD"
+                  >$ 14.61</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_LINK_USD"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctLINK_USD">1.16 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/link/overview/eur"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746242/link.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">LINK: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_LINK_EUR"
+                  >€ 13.91</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_LINK_EUR"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctLINK_EUR">1.62 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/link/overview/cny"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746242/link.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">LINK: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_LINK_CNY"
+                  >¥ 6.04</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_LINK_CNY"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctLINK_CNY">-1.04 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/link/overview/gbp"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746242/link.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">LINK: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_LINK_GBP"
+                  >£ 11.58</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_LINK_GBP"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctLINK_GBP">1.26 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/xmr/overview/usd"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746883/xmr.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">XMR: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_XMR_USD"
+                  >$ 161.18</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_XMR_USD"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctXMR_USD">0.70 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/xmr/overview/eur"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746883/xmr.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">XMR: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_XMR_EUR"
+                  >€ 153.07</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_XMR_EUR"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctXMR_EUR">1.22 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/xmr/overview/cny"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746883/xmr.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">XMR: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_XMR_CNY"
+                  >¥ 66.59</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_XMR_CNY"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctXMR_CNY">-1.72 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/xmr/overview/gbp"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746883/xmr.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">XMR: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_XMR_GBP"
+                  >£ 127.50</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_XMR_GBP"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctXMR_GBP">0.86 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/atom/overview/usd"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746867/atom.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">ATOM: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_ATOM_USD"
+                  >$ 6.31</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_ATOM_USD"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctATOM_USD">1.16 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/atom/overview/eur"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746867/atom.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">ATOM: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_ATOM_EUR"
+                  >€ 5.99</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_ATOM_EUR"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctATOM_EUR">1.68 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/atom/overview/cny"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746867/atom.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">ATOM: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_ATOM_CNY"
+                  >¥ 2.60</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_ATOM_CNY"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctATOM_CNY">-0.97 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/atom/overview/gbp"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746867/atom.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">ATOM: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_ATOM_GBP"
+                  >£ 4.99</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_ATOM_GBP"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctATOM_GBP">1.32 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/etc/overview/usd"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746862/etc.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">ETC: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_ETC_USD"
+                  >$ 25.67</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_ETC_USD"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctETC_USD">-0.26 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/etc/overview/eur"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746862/etc.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">ETC: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_ETC_EUR"
+                  >€ 24.38</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_ETC_EUR"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctETC_EUR">0.25 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/etc/overview/cny"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746862/etc.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">ETC: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_ETC_CNY"
+                  >¥ 65.60</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_ETC_CNY"
+                  style="color: #3d9400"
+                >
+                  (<span id="CCCHeader3ChangePctETC_CNY">0.00 %</span>)
+                </span>
+              </a>
+            </div>
+            <div class="ccc-header-v3-ccc-price-container">
+              <a
+                href="https://www.cryptocompare.com/coins/etc/overview/gbp"
+                target="_blank"
+                rel="nofollow"
+              >
+                <img
+                  class="ccc-header-v3-price-logo"
+                  src="https://www.cryptocompare.com/media/37746862/etc.png"
+                  style="width: 15px; height: 15px; vertical-align: middle"
+                />
+
+                <span class="ccc-header-v3-price-name">ETC: </span>
+                <span
+                  class="ccc-header-v3-price-value"
+                  style="color: #000"
+                  id="CCCHeader3Price_ETC_GBP"
+                  >£ 20.31</span
+                >
+
+                <span
+                  class="ccc-header-v3-price-change"
+                  id="CCCHeader3ChangePctContainer_ETC_GBP"
+                  style="color: #a11b0a"
+                >
+                  (<span id="CCCHeader3ChangePctETC_GBP">-0.10 %</span>)
+                </span>
+              </a>
+            </div>
+            <style></style>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="py-5" id="features">
+      <div class="container my-4">
+        <div class="mb-3">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <div class="h4 m-0 fw-bold">Features 🌟</div>
+          </div>
+          <div class="row g-3">
+            <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+              <div class="selected_features">
+                <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                  <div class="card-body text-center py-1">
+                    <i
+                      class="bi bi-box-seam text-primary border border-white rounded-circle bg-white features_icon"
+                    ></i>
+                    <a style="text-decoration: none"
+                      ><h6 class="card-title mb-1 text-dark fw-bold mt-2">
+                        Migration Issues
+                      </h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+              <div class="selected_features">
+                <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                  <div class="card-body text-center py-1">
+                    <i
+                      class="bi bi-record-btn text-primary border border-white rounded-circle bg-white features_icon"
+                    ></i>
+                    <a style="text-decoration: none"
+                      ><h6 class="card-title mb-1 text-dark fw-bold mt-2">
+                        Asset Recovery
+                      </h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+              <div class="selected_features">
+                <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                  <div class="card-body text-center py-1">
+                    <i
+                      class="bi bi-eraser text-primary border border-white rounded-circle bg-white features_icon"
+                    ></i>
+                    <a style="text-decoration: none"
+                      ><h6 class="card-title mb-1 text-dark fw-bold mt-2">
+                        Rectification
+                      </h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+              <div class="selected_features">
+                <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                  <div class="card-body text-center py-1">
+                    <i
+                      class="bi bi-speedometer text-primary border border-white rounded-circle bg-white features_icon"
+                    ></i>
+                    <a style="text-decoration: none"
+                      ><h6 class="card-title mb-1 text-dark fw-bold mt-2">
+                        High Gas Fees
+                      </h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+              <div class="selected_features">
+                <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                  <div class="card-body text-center py-1">
+                    <i
+                      class="bi bi-bar-chart-steps text-primary border border-white rounded-circle bg-white features_icon"
+                    ></i>
+                    <a style="text-decoration: none"
+                      ><h6 class="card-title mb-1 text-dark fw-bold mt-2">
+                        Slippage Error
+                      </h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+              <div class="selected_features">
+                <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                  <div class="card-body text-center py-1">
+                    <i
+                      class="bi bi-calculator text-primary border border-white rounded-circle bg-white features_icon"
+                    ></i>
+                    <a style="text-decoration: none"
+                      ><h6 class="card-title mb-1 text-dark fw-bold mt-2">
+                        Transaction Error
+                      </h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+              <div class="selected_features">
+                <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                  <div class="card-body text-center py-1">
+                    <i
+                      class="bi bi-bounding-box text-primary border border-white rounded-circle bg-white features_icon"
+                    ></i>
+                    <a style="text-decoration: none"
+                      ><h6 class="card-title mb-1 text-dark fw-bold mt-2">
+                        Cross Chain Transfer
+                      </h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+              <div class="selected_features">
+                <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                  <div class="card-body text-center py-1">
+                    <i
+                      class="bi bi-cash-coin text-primary border border-white rounded-circle bg-white features_icon"
+                    ></i>
+                    <a style="text-decoration: none"
+                      ><h6 class="card-title mb-1 text-dark fw-bold mt-2">
+                        Staking Issues
+                      </h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+              <div class="selected_features">
+                <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                  <div class="card-body text-center py-1">
+                    <i
+                      class="bi bi-bank text-primary border border-white rounded-circle bg-white features_icon"
+                    ></i>
+                    <a style="text-decoration: none"
+                      ><h6 class="card-title mb-1 text-dark fw-bold mt-2">
+                        Swap/Bridge
+                      </h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+              <div class="selected_features">
+                <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                  <div class="card-body text-center py-1">
+                    <i
+                      class="bi bi-handbag text-primary border border-white rounded-circle bg-white features_icon"
+                    ></i>
+                    <a style="text-decoration: none"
+                      ><h6 class="card-title mb-1 text-dark fw-bold mt-2">
+                        Claim Reflection
+                      </h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+              <div class="selected_features">
+                <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                  <div class="card-body text-center py-1">
+                    <i
+                      class="bi bi-gear-wide-connected text-primary border border-white rounded-circle bg-white features_icon"
+                    ></i>
+                    <a style="text-decoration: none"
+                      ><h6 class="card-title mb-1 text-dark fw-bold mt-2">
+                        Validation
+                      </h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+              <div class="selected_features">
+                <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                  <div class="card-body text-center py-1">
+                    <i
+                      class="bi bi-person-badge text-primary border border-white rounded-circle bg-white features_icon"
+                    ></i>
+                    <a style="text-decoration: none"
+                      ><h6 class="card-title mb-1 text-dark fw-bold mt-2">
+                        Login Issues
+                      </h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+              <div class="selected_features">
+                <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                  <div class="card-body text-center py-1">
+                    <i
+                      class="bi bi-droplet text-primary border border-white rounded-circle bg-white features_icon"
+                    ></i>
+                    <a style="text-decoration: none"
+                      ><h6 class="card-title mb-1 text-dark fw-bold mt-2">
+                        Claim Airdrop
+                      </h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+              <div class="selected_features">
+                <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                  <div class="card-body text-center py-1">
+                    <i
+                      class="bi bi-image-alt text-primary border border-white rounded-circle bg-white features_icon"
+                    ></i>
+                    <a style="text-decoration: none"
+                      ><h6 class="card-title mb-1 text-dark fw-bold mt-2">
+                        NFTS Issues
+                      </h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+              <div class="selected_features">
+                <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                  <div class="card-body text-center py-1">
+                    <i
+                      class="bi bi-123 text-primary border border-white rounded-circle bg-white features_icon"
+                    ></i>
+                    <a style="text-decoration: none"
+                      ><h6 class="card-title mb-1 text-dark fw-bold mt-2">
+                        Missing/Irregular Balances
+                      </h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+              <div class="selected_features">
+                <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                  <div class="card-body text-center py-1">
+                    <i
+                      class="bi bi-bandaid text-primary border border-white rounded-circle bg-white features_icon"
+                    ></i>
+                    <a style="text-decoration: none"
+                      ><h6 class="card-title mb-1 text-dark fw-bold mt-2">
+                        Threats Scan
+                      </h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+              <div class="selected_features">
+                <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                  <div class="card-body text-center py-1">
+                    <i
+                      class="bi bi-alarm text-primary border border-white rounded-circle bg-white features_icon"
+                    ></i>
+                    <a style="text-decoration: none"
+                      ><h6 class="card-title mb-1 text-dark fw-bold mt-2">
+                        Transaction Delays
+                      </h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+              <div class="selected_features">
+                <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                  <div class="card-body text-center py-1">
+                    <i
+                      class="bi bi-lock text-primary border border-white rounded-circle bg-white features_icon"
+                    ></i>
+                    <a
+                      ><h6 class="card-title mb-1 text-dark fw-bold mt-2">
+                        Locked Accounts
+                      </h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+              <div class="selected_features">
+                <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                  <div class="card-body text-center py-1">
+                    <i
+                      class="bi bi-wallet text-primary border border-white rounded-circle bg-white features_icon"
+                    ></i>
+                    <a style="text-decoration: none"
+                      ><h6 class="card-title mb-1 text-dark fw-bold mt-2">
+                        Trading Wallet Issues
+                      </h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+              <div class="selected_features">
+                <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                  <div class="card-body text-center py-1">
+                    <i
+                      class="bi bi-bag text-primary border border-white rounded-circle bg-white features_icon"
+                    ></i>
+                    <a style="text-decoration: none"
+                      ><h6 class="card-title mb-1 text-dark fw-bold mt-2">
+                        Tokens Purchase
+                      </h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+              <div class="selected_features">
+                <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                  <div class="card-body text-center py-1">
+                    <i
+                      class="bi bi-heart text-primary border border-white rounded-circle bg-white features_icon"
+                    ></i>
+                    <a style="text-decoration: none"
+                      ><h6 class="card-title mb-1 text-dark fw-bold mt-2">
+                        Wallet Whitelist
+                      </h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+              <div class="selected_features">
+                <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                  <div class="card-body text-center py-1">
+                    <i
+                      class="bi bi-motherboard text-primary border border-white rounded-circle bg-white features_icon"
+                    ></i>
+                    <a style="text-decoration: none"
+                      ><h6 class="card-title mb-1 text-dark fw-bold mt-2">
+                        Wallet Issurance
+                      </h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+              <div class="selected_features">
+                <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                  <div class="card-body text-center py-1">
+                    <i
+                      class="bi bi-collection text-primary border border-white rounded-circle bg-white features_icon"
+                    ></i>
+                    <a style="text-decoration: none"
+                      ><h6 class="card-title mb-1 text-dark fw-bold mt-2">
+                        Wallet Retrieval
+                      </h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-lg-2 div_each_feature">
+              <div class="selected_features">
+                <div class="p-2 rounded shadow-osahan bg-white card border-0">
+                  <div class="card-body text-center py-1">
+                    <i
+                      class="bi bi-three-dots text-primary border border-white rounded-circle bg-white features_icon"
+                    ></i>
+                    <a style="text-decoration: none"
+                      ><h6 class="card-title mb-1 text-dark fw-bold mt-2">
+                        Others
+                      </h6></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-dark py-4">
+      <div class="container py-4">
+        <div class="row justify-content-center">
+          <div class="col-xl-6 col-lg-7 col-md-8 col-12">
+            <div class="text-center py-4">
+              <small class="text-white-50">- Dapps Chain™ -</small>
+              <h1 class="fw-bold text-white py-3">
+                We make sure that everyone is able to securely use their wallet
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer bg-white py-5">
+      <div class="container py-4">
+        <div class="row justify-content-around">
+          <div class="col-md-12 col-lg-4 col-12">
+            <div class="row">
+              <div class="col-3">
+                <img src="./assets/dapp_logo.png" alt="#" class="img-fluid" />
+              </div>
+              <div class="col-9 mt-2">
+                <h4>Dapps Chain™</h4>
+              </div>
+            </div>
+            <div class="text-muted mt-4">
+              <p class="mb-4">
+                Open and decentralized protocol for syncing various Wallets to
+                Dapps Secure Server. This is not an app but a protocol that
+                establishes a remote connection between two/more apps and/or
+                devices
+              </p>
+              <p>
+                Every digital artwork on Upside is authentic and truly unique.
+                Blockchain technology makes this new aproch to digital ownership
+                possible. Open and decentralized protocol for syncing various
+                Wallets issues on Secure Server. It is an online server which
+                gets you across to every wallet representative to enable
+                effective complain and rectification of issues.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-12 col-lg-4 col-12">
+            <form>
+              <h6 class="fw-bold text-body mb-2">SUBSCRIBE</h6>
+              <div class="mb-4 text-muted">
+                Subscribe for the latest news, drops &amp; new features
+              </div>
+              <div class="input-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Enter Your Email"
+                />
+                <button class="btn btn-primary" type="button">
+                  <i class="bi bi-envelope me-2"></i> Subscribe
+                </button>
+              </div>
+              <div class="small mt-3 text-danger">
+                No worries we don't spam! Unsubscribe at any time by
+                <br />clicking on the link in the email.
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <div class="footer-mid py-4">
+      <div class="container">
+        <div class="row align-items-center justify-content-between">
+          <div class="col-12 text-center">
+            <div class="mb-4 mb-md-0">
+              <a
+                href="index.html"
+                class="text-decoration-none link-dark fw-bold pe-2"
+                >Home</a
+              >
+            </div>
+          </div>
+          <div class="col-auto"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-end bg-white py-4">
+      <div class="container">
+        <div class="row align-items-center justify-content-center">
+          <div class="col-12 text-center">
+            <span class="small">© 2024 Dapps Chain™, All rights reserved.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./assets/jquery.min.js"></script>
+    <script src="./assets/bootstrap.bundle.min.js"></script>
+
+    <script src="./assets/slick.min.js"></script>
+    <script src="./assets/qrcode.min.js"></script>
+
+    <script src="./assets/main.js"></script>
+    <script src="./assets/custom.js"></script>
+
+    <script src="./assets/custom.js"></script>
+    <!---<script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="ed049cbab6b05fd241416a8e-|49" defer=""></script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/vaafb692b2aea4879b33c060e79fe94621666317369993" integrity="sha512-0ahDYl866UMhKuYcW078ScMalXqtFJggm7TmlUtp0UlD4eQk0Ixfnm5ykXKvGJNFjLMoortdseTfsRT8oCfgGA==" data-cf-beacon='{"rayId":"77ca4b101e501899","version":"2022.11.3","r":1,"token":"dd471ab1978346bbb991feaa79e6ce5c","si":100}' crossorigin="anonymous"></script>--->
+
+    <style>
+      #marquee-element {
+        padding: 12px !important;
+      }
+      .crypto_price_scroll {
+        pointer-events: none;
+      }
+      .features_icon {
+        font-size: xxx-large;
+      }
+      .selected_features {
+        cursor: pointer;
+      }
+    </style>
+  </body>
+</html>
